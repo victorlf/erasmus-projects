@@ -1,6 +1,8 @@
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
 import 'package:erasmus_projects/screens/home_screen.dart';
 import 'package:erasmus_projects/screens/organization_signin_screen.dart';
+import 'package:erasmus_projects/screens/program_screen.dart';
+import 'package:erasmus_projects/screens/publish_project_screen.dart';
 import 'package:erasmus_projects/screens/register_organization_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +36,8 @@ class MyApp extends StatelessWidget {
           RegisterOrganizationScreen.id: (context) =>
               RegisterOrganizationScreen(),
           OrganizationSigninScreen.id: (context) => OrganizationSigninScreen(),
+          ProgramScreen.id: (context) => ProgramScreen(),
+          PublishProjectScreen.id: (context) => PublishProjectScreen(),
         });
   }
 }

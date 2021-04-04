@@ -1,3 +1,4 @@
+import 'package:erasmus_projects/screens/program_screen.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -105,20 +106,25 @@ class InfoCard extends StatelessWidget {
         Positioned(
           right: -10.0,
           top: 30,
-          child: Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(blurRadius: 2, color: Colors.grey, spreadRadius: 2)
-              ],
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pushNamed(context, ProgramScreen.id);
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(blurRadius: 2, color: Colors.grey, spreadRadius: 2)
+                ],
+              ),
+              child: CircleAvatar(
+                  backgroundColor: Colors.grey[350],
+                  child: FaIcon(
+                    FontAwesomeIcons.angleRight,
+                    color: kYellowGold,
+                  )),
             ),
-            child: CircleAvatar(
-                backgroundColor: Colors.grey[350],
-                child: FaIcon(
-                  FontAwesomeIcons.angleRight,
-                  color: kYellowGold,
-                )),
           ),
         )
       ],
