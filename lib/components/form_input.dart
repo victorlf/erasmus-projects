@@ -4,8 +4,17 @@ import 'package:flutter/material.dart';
 class FormInput extends StatelessWidget {
   final String title;
   final String inputHint;
+  final TextEditingController controller;
+  final isPassword;
+  final keyboardType;
 
-  FormInput({this.title, this.inputHint});
+  FormInput({
+    @required this.title,
+    @required this.inputHint,
+    this.controller,
+    this.isPassword = false,
+    this.keyboardType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +30,9 @@ class FormInput extends StatelessWidget {
         Container(
           width: 300.0,
           child: TextField(
-            //style: TextStyle(height: 0.2),
+            controller: controller,
+            obscureText: isPassword,
+            keyboardType: keyboardType,
             decoration: InputDecoration(
               isDense: true,
               hintText: inputHint,

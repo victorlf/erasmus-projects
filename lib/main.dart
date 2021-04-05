@@ -1,13 +1,30 @@
+import 'package:erasmus_projects/providers/drawer_active_screen.dart';
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
 import 'package:erasmus_projects/screens/home_screen.dart';
 import 'package:erasmus_projects/screens/organization_signin_screen.dart';
 import 'package:erasmus_projects/screens/program_screen.dart';
 import 'package:erasmus_projects/screens/publish_project_screen.dart';
+import 'package:erasmus_projects/screens/rate_us.dart';
 import 'package:erasmus_projects/screens/register_organization_screen.dart';
+import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await initialization;
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) => DrawerActiveScreen(
+            PublishProjectScreen.id,
+          ),
+        )
+      ],
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -38,6 +55,7 @@ class MyApp extends StatelessWidget {
           OrganizationSigninScreen.id: (context) => OrganizationSigninScreen(),
           ProgramScreen.id: (context) => ProgramScreen(),
           PublishProjectScreen.id: (context) => PublishProjectScreen(),
+          RateUs.id: (context) => RateUs(),
         });
   }
 }

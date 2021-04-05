@@ -1,8 +1,10 @@
 import 'package:erasmus_projects/components/form_input.dart';
+import 'package:erasmus_projects/screens/explore/explore_screen.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class RegisterOrganizationScreen extends StatefulWidget {
   static const String id = "register_organization_sreen";
@@ -14,6 +16,13 @@ class RegisterOrganizationScreen extends StatefulWidget {
 
 class _RegisterOrganizationScreenState
     extends State<RegisterOrganizationScreen> {
+  //final _auth = FirebaseAuth.instance;
+  final organizationNameController = TextEditingController();
+  final organizationPicController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final passwordConfirmedController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -81,22 +90,31 @@ class _RegisterOrganizationScreenState
                 FormInput(
                   title: "Organization Name",
                   inputHint: 'Enter Organization Name',
+                  controller: organizationNameController,
                 ),
                 FormInput(
                   title: "Organization PIC Number",
                   inputHint: 'Enter PIC Number',
+                  controller: organizationPicController,
+                  keyboardType: TextInputType.number,
                 ),
                 FormInput(
                   title: "Email",
                   inputHint: 'Enter Email',
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 FormInput(
                   title: "Password",
                   inputHint: 'Enter Password',
+                  controller: passwordController,
+                  isPassword: true,
                 ),
                 FormInput(
                   title: "Confirm Password",
                   inputHint: 'Enter Password',
+                  controller: passwordConfirmedController,
+                  isPassword: true,
                 ),
                 Theme(
                   data: ThemeData(unselectedWidgetColor: Colors.blue[900]),
@@ -130,7 +148,19 @@ class _RegisterOrganizationScreenState
                 ),
                 SizedBox(height: 10.0),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    try {
+                      final newUser = await auth.createUserWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      );
+                      if (newUser != null) {
+                        Navigator.pushNamed(context, ExploreScreen.id);
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
                   child: Text(
                     "Create Account",
                     style: TextStyle(

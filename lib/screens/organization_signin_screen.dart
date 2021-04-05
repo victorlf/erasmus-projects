@@ -1,9 +1,20 @@
 import 'package:erasmus_projects/components/form_input.dart';
+import 'package:erasmus_projects/screens/explore/explore_screen.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class OrganizationSigninScreen extends StatelessWidget {
+class OrganizationSigninScreen extends StatefulWidget {
   static const String id = 'organization_signin_screen';
+
+  @override
+  _OrganizationSigninScreenState createState() =>
+      _OrganizationSigninScreenState();
+}
+
+class _OrganizationSigninScreenState extends State<OrganizationSigninScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +83,29 @@ class OrganizationSigninScreen extends StatelessWidget {
                 FormInput(
                   title: "Email",
                   inputHint: 'Enter Email',
+                  controller: emailController,
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 FormInput(
                   title: "Password",
                   inputHint: 'Enter Password',
+                  controller: passwordController,
+                  isPassword: true,
                 ),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    try {
+                      final user = auth.signInWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      );
+                      if (user != null) {
+                        Navigator.pushNamed(context, ExploreScreen.id);
+                      }
+                    } catch (e) {
+                      print(e);
+                    }
+                  },
                   child: Text(
                     "Login",
                     style: TextStyle(

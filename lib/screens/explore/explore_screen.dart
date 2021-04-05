@@ -1,9 +1,11 @@
 import 'package:erasmus_projects/components/card_info.dart';
+import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
 import 'package:erasmus_projects/screens/publish_project_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class ExploreScreen extends StatefulWidget {
   static const String id = "explore_screen";
@@ -13,12 +15,35 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
+  //final _auth = FirebaseAuth.instance;
+  User loggedInUser;
+
   String dropdownValue1 = 'Recently Added';
   String dropdownValue2 = 'Country';
 
   @override
+  void initState() {
+    super.initState();
+
+    getCurrentUser();
+  }
+
+  void getCurrentUser() async {
+    try {
+      final user = await auth.currentUser;
+      if (user != null) {
+        loggedInUser = user;
+        print(loggedInUser.email);
+      }
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MainDrawer(),
       body: ListView(
         //crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -57,9 +82,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    FaIcon(
-                      FontAwesomeIcons.userCircle,
-                      color: kYellowGold,
+                    Builder(
+                      builder: (context) => GestureDetector(
+                        onTap: () => Scaffold.of(context).openDrawer(),
+                        child: FaIcon(
+                          FontAwesomeIcons.userCircle,
+                          color: kYellowGold,
+                        ),
+                      ),
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.65,
