@@ -7,6 +7,7 @@ class FormInput extends StatelessWidget {
   final TextEditingController controller;
   final isPassword;
   final keyboardType;
+  final validator;
 
   FormInput({
     @required this.title,
@@ -14,6 +15,7 @@ class FormInput extends StatelessWidget {
     this.controller,
     this.isPassword = false,
     this.keyboardType,
+    this.validator,
   });
 
   @override
@@ -29,7 +31,7 @@ class FormInput extends StatelessWidget {
         ),
         Container(
           width: 300.0,
-          child: TextField(
+          child: TextFormField(
             controller: controller,
             obscureText: isPassword,
             keyboardType: keyboardType,
@@ -41,6 +43,7 @@ class FormInput extends StatelessWidget {
                 fontSize: 12.0,
               ),
             ),
+            validator: validator,
           ),
         ),
         SizedBox(

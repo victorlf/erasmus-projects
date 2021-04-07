@@ -119,7 +119,8 @@ class _MainDrawerState extends State<MainDrawer> {
                 children: [
                   ListTile(
                     title: Text(
-                      'Organization Name',
+                      auth.currentUser.email,
+                      //'Organization Name',
                       style: TextStyle(
                         color: Colors.blue[900],
                       ),

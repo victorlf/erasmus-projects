@@ -35,6 +35,8 @@ dependencies:
   firebase_auth: ^1.0.1
   cloud_firestore: ^1.0.3
   provider: ^5.0.0
+  loading_overlay: ^0.3.0
+  http: ^0.13.1
 
 dev_dependencies:
   flutter_test:

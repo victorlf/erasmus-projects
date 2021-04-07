@@ -5,7 +5,7 @@ import 'package:erasmus_projects/screens/organization_signin_screen.dart';
 import 'package:erasmus_projects/screens/program_screen.dart';
 import 'package:erasmus_projects/screens/publish_project_screen.dart';
 import 'package:erasmus_projects/screens/rate_us.dart';
-import 'package:erasmus_projects/screens/register_organization_screen.dart';
+import 'package:erasmus_projects/screens/register_organization_screen/register_organization_screen.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

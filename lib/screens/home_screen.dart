@@ -1,6 +1,6 @@
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
 import 'package:erasmus_projects/screens/organization_signin_screen.dart';
-import 'package:erasmus_projects/screens/register_organization_screen.dart';
+import 'package:erasmus_projects/screens/register_organization_screen/register_organization_screen.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:flutter/material.dart';
 

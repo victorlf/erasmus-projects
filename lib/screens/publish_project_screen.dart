@@ -269,6 +269,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                       ),
                     ),
                     DropdownButton<String>(
+                      isExpanded: true,
                       value: dropdownValue,
                       icon: FaIcon(
                         FontAwesomeIcons.angleDown,
@@ -501,6 +502,9 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                           )),
                     ),
                   ],
+                ),
+                SizedBox(
+                  height: 30.0,
                 ),
                 ElevatedButton(
                   onPressed: () {},

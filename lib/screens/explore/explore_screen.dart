@@ -28,12 +28,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
     getCurrentUser();
   }
 
-  void getCurrentUser() async {
+  Future getCurrentUser() async {
     try {
       final user = await auth.currentUser;
       if (user != null) {
         loggedInUser = user;
         print(loggedInUser.email);
+        return loggedInUser;
       }
     } catch (e) {
       print(e);
@@ -65,10 +66,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
               Positioned(
                 //left: 10.0,
                 top: 20,
-                child: IconButton(
-                  icon: Icon(Icons.arrow_back, color: Colors.white),
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
+                child: FutureBuilder(
+                    future: getCurrentUser(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return snapshot.data == null
+                          ? IconButton(
+                              icon: Icon(Icons.arrow_back, color: Colors.white),
+                              onPressed: () => Navigator.of(context).pop(),
+                            )
+                          : Container();
+                    }),
               ),
             ],
           ),
@@ -82,14 +89,22 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Builder(
-                      builder: (context) => GestureDetector(
-                        onTap: () => Scaffold.of(context).openDrawer(),
-                        child: FaIcon(
-                          FontAwesomeIcons.userCircle,
-                          color: kYellowGold,
-                        ),
-                      ),
+                    FutureBuilder(
+                      future: getCurrentUser(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        return snapshot.data != null
+                            ? Builder(
+                                builder: (context) => GestureDetector(
+                                  onTap: () =>
+                                      Scaffold.of(context).openDrawer(),
+                                  child: FaIcon(
+                                    FontAwesomeIcons.userCircle,
+                                    color: kYellowGold,
+                                  ),
+                                ),
+                              )
+                            : Container();
+                      },
                     ),
                     Container(
                       width: MediaQuery.of(context).size.width * 0.65,
@@ -182,27 +197,34 @@ class _ExploreScreenState extends State<ExploreScreen> {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: ElevatedButton(
-              onPressed: () {
-                Navigator.pushNamed(context, PublishProjectScreen.id);
-              },
-              child: Text(
-                "Publish",
-                style: TextStyle(
-                  color: kYellowGold,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14.0,
-                ),
-              ),
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue[900],
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0)),
-              ),
-            ),
-          ),
+          FutureBuilder(
+              future: getCurrentUser(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                return snapshot.data != null
+                    ? Padding(
+                        padding: const EdgeInsets.all(25.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, PublishProjectScreen.id);
+                          },
+                          child: Text(
+                            "Publish",
+                            style: TextStyle(
+                              color: kYellowGold,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14.0,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.blue[900],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(30.0)),
+                          ),
+                        ),
+                      )
+                    : Container();
+              }),
         ],
       ),
     );
