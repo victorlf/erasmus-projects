@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
 import 'package:erasmus_projects/screens/home_screen.dart';
 import 'package:erasmus_projects/screens/organization_signin_screen.dart';
+import 'package:erasmus_projects/services/network.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
@@ -142,13 +143,9 @@ Future registerOrganizationAuthentication(context, String email,
 
 Future organizationSigninAuthentication(
     context, String email, String password) async {
-  try {
-    final result = await InternetAddress.lookup('google.com');
-    if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-      print('connected');
-    }
-  } on SocketException catch (_) {
-    print('not connected');
+  bool isConnected = await checkNetworkConnection();
+
+  if (!isConnected) {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
