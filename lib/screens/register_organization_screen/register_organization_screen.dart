@@ -1,12 +1,13 @@
 import 'package:erasmus_projects/components/form_input.dart';
 import 'package:erasmus_projects/screens/home_screen.dart';
 import 'package:erasmus_projects/screens/organization_signin_screen.dart';
+import 'package:erasmus_projects/services/authentication.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
+import 'package:erasmus_projects/utilities/forms_validation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:loading_overlay/loading_overlay.dart';
-import 'package:http/http.dart' as http;
 
 class RegisterOrganizationScreen extends StatefulWidget {
   static const String id = "register_organization_sreen";
@@ -26,36 +27,6 @@ class _RegisterOrganizationScreenState
   final passwordController = TextEditingController();
   final passwordConfirmedController = TextEditingController();
   bool isBoxChecked = false;
-
-  bool validateAndSave() {
-    final FormState form = _formKey.currentState;
-    if (form.validate()) {
-      print('Form is valid');
-      return true;
-    } else {
-      print('Form is invalid');
-      return false;
-    }
-  }
-
-  Future<bool> verifyPICNumber(String pic) async {
-    // String url = 'ec.europa.eu';
-    // String param =
-    //     'info/funding-tenders/opportunities/api/orgProfile/data.json?pic=999984059';
-    //final response = await http.get(Uri.https(url, param));
-    final response = await http.get(Uri.parse(
-        'https://ec.europa.eu/info/funding-tenders/opportunities/api/orgProfile/data.json?pic=${pic}'));
-
-    if (response.statusCode == 200) {
-      print(response.statusCode);
-      print('PIC number does exist');
-      return true;
-    } else {
-      print(response.statusCode);
-      print('PIC number doesn\'t exist');
-      return false;
-    }
-  }
 
   @override
   void dispose() {
@@ -237,99 +208,20 @@ class _RegisterOrganizationScreenState
                           showSpinner = true;
                         });
 
-                        if (validateAndSave()) {
-                          if (!isBoxChecked) {
-                            try {
-                              bool isValid = await verifyPICNumber(
-                                  organizationPicController.text);
-                              if (!isValid) {
-                                setState(() {
-                                  showSpinner = false;
-                                });
-                                return showDialog<void>(
-                                  context: context,
-                                  barrierDismissible:
-                                      false, // user must tap button!
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text('PIC Number Error'),
-                                      content: SingleChildScrollView(
-                                        child: ListBody(
-                                          children: <Widget>[
-                                            Text(
-                                              'PIC Number used doesn\'t exist in the ec.europa.eu database!',
-                                            ),
-                                            Text(
-                                              'Please, check if the number is correct',
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          child: Text('OK'),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
-                            } catch (e) {
-                              print(e);
-                            }
-                          }
-
-                          try {
-                            final newUser =
-                                await auth.createUserWithEmailAndPassword(
-                              email: emailController.text,
-                              password: passwordController.text,
-                            );
-
-                            if (newUser != null) {
-                              await newUser.user.sendEmailVerification();
-                              showDialog<void>(
-                                context: context,
-                                barrierDismissible:
-                                    false, // user must tap button!
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('Verify Email'),
-                                    content: SingleChildScrollView(
-                                      child: ListBody(
-                                        children: <Widget>[
-                                          Text(
-                                              'A verification email was sent to you, please go check and confirm before Log in!'),
-                                        ],
-                                      ),
-                                    ),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        child: Text('Go Sign In'),
-                                        onPressed: () {
-                                          Navigator.pushNamedAndRemoveUntil(
-                                            context,
-                                            OrganizationSigninScreen.id,
-                                            ModalRoute.withName(HomeScreen.id),
-                                          );
-                                        },
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            }
-                            setState(() {
-                              showSpinner = false;
-                            });
-                          } catch (e) {
-                            print(e);
-                          }
+                        if (validateAndSave(_formKey.currentState)) {
+                          await registerOrganizationAuthentication(
+                              context,
+                              emailController.text,
+                              passwordController.text,
+                              isBoxChecked,
+                              organizationPicController.text);
+                          setState(() {
+                            showSpinner = false;
+                          });
                         } else {
-                          showSpinner = false;
+                          setState(() {
+                            showSpinner = false;
+                          });
                         }
                       },
                       child: Text(

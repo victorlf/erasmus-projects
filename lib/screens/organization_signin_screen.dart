@@ -1,6 +1,8 @@
 import 'package:erasmus_projects/components/form_input.dart';
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
+import 'package:erasmus_projects/services/authentication.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
+import 'package:erasmus_projects/utilities/forms_validation.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:flutter/material.dart';
 
@@ -17,17 +19,6 @@ class _OrganizationSigninScreenState extends State<OrganizationSigninScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  bool validateAndSave() {
-    final FormState form = _formKey.currentState;
-    if (form.validate()) {
-      print('Form is valid');
-      return true;
-    } else {
-      print('Form is invalid');
-      return false;
-    }
-  }
 
   @override
   void dispose() {
@@ -137,79 +128,16 @@ class _OrganizationSigninScreenState extends State<OrganizationSigninScreen> {
                         setState(() {
                           showSpinner = true;
                         });
-                        if (validateAndSave()) {
-                          try {
-                            final user = await auth.signInWithEmailAndPassword(
-                              email: emailController.text,
-                              password: passwordController.text,
-                            );
-                            if (user != null) {
-                              if (user.user.emailVerified) {
-                                Navigator.pushNamed(context, ExploreScreen.id);
-                              } else {
-                                showDialog<void>(
-                                  context: context,
-                                  barrierDismissible:
-                                      false, // user must tap button!
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text('Sign In Error'),
-                                      content: SingleChildScrollView(
-                                        child: ListBody(
-                                          children: <Widget>[
-                                            Text('Email isn\'t verified!'),
-                                          ],
-                                        ),
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          child: Text('OK'),
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              }
-                            }
-                            setState(() {
-                              showSpinner = false;
-                            });
-                          } catch (e) {
-                            print(e);
-                            setState(() {
-                              showSpinner = false;
-                            });
-                            showDialog<void>(
-                              context: context,
-                              barrierDismissible:
-                                  false, // user must tap button!
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Sign In Error'),
-                                  content: SingleChildScrollView(
-                                    child: ListBody(
-                                      children: <Widget>[
-                                        Text('Incorrect email or password!'),
-                                      ],
-                                    ),
-                                  ),
-                                  actions: <Widget>[
-                                    TextButton(
-                                      child: Text('OK'),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          }
+                        if (validateAndSave(_formKey.currentState)) {
+                          await organizationSigninAuthentication(context,
+                              emailController.text, passwordController.text);
+                          setState(() {
+                            showSpinner = false;
+                          });
                         } else {
-                          showSpinner = false;
+                          setState(() {
+                            showSpinner = false;
+                          });
                         }
                       },
                       child: Text(

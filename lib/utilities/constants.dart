@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 
 const Color kYellowGold = Color(0xFFAB9331);
 
-final Future<FirebaseApp> initialization = Firebase.initializeApp();
-FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-FirebaseAuth auth = FirebaseAuth.instance;
+final Future<FirebaseApp> kInitialization = Firebase.initializeApp();
+FirebaseFirestore kFirebaseFirestore = FirebaseFirestore.instance;
+FirebaseAuth kAuth = FirebaseAuth.instance;
 
 const kProgressCircle = CircularProgressIndicator(
   backgroundColor: Color(0xFFFFE0E0E0),

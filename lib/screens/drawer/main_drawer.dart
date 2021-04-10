@@ -119,7 +119,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 children: [
                   ListTile(
                     title: Text(
-                      auth.currentUser.email,
+                      kAuth.currentUser.email,
                       //'Organization Name',
                       style: TextStyle(
                         color: Colors.blue[900],
@@ -136,7 +136,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       ),
                     ),
                     onTap: () {
-                      auth.signOut();
+                      kAuth.signOut();
                       Navigator.pop(context);
                       Navigator.pushNamed(context, HomeScreen.id);
                     },

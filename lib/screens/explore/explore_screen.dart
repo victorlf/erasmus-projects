@@ -1,6 +1,7 @@
 import 'package:erasmus_projects/components/card_info.dart';
 import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
 import 'package:erasmus_projects/screens/publish_project_screen.dart';
+import 'package:erasmus_projects/services/authentication.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -15,9 +16,6 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
-  //final _auth = FirebaseAuth.instance;
-  User loggedInUser;
-
   String dropdownValue1 = 'Recently Added';
   String dropdownValue2 = 'Country';
 
@@ -26,19 +24,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     super.initState();
 
     getCurrentUser();
-  }
-
-  Future getCurrentUser() async {
-    try {
-      final user = await auth.currentUser;
-      if (user != null) {
-        loggedInUser = user;
-        print(loggedInUser.email);
-        return loggedInUser;
-      }
-    } catch (e) {
-      print(e);
-    }
   }
 
   @override
