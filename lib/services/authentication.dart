@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:erasmus_projects/models/user_model.dart';
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
 import 'package:erasmus_projects/screens/home_screen.dart';
 import 'package:erasmus_projects/screens/organization_signin_screen.dart';
@@ -26,8 +27,8 @@ Future<bool> verifyPICNumber(String pic) async {
   }
 }
 
-Future registerOrganizationAuthentication(context, String email,
-    String password, isBoxChecked, String organizationPic) async {
+Future registerOrganizationAuthentication(context, String name,
+    String organizationPic, String email, String password, isBoxChecked) async {
   if (!isBoxChecked) {
     try {
       bool isValid = await verifyPICNumber(organizationPic);
@@ -74,7 +75,12 @@ Future registerOrganizationAuthentication(context, String email,
     );
 
     if (newUser != null) {
+      UserModel userModel =
+          UserModel(name: name, pic: organizationPic, email: email);
+      userModel.addSnaphot();
+
       await newUser.user.sendEmailVerification();
+
       showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
@@ -245,12 +251,25 @@ Future organizationSigninAuthentication(
   }
 }
 
-Future getCurrentUser() async {
+Future<User> getCurrentUser() async {
   try {
-    final user = await kAuth.currentUser;
+    final user = kAuth.currentUser;
     if (user != null) {
       User loggedInUser = user;
       print(loggedInUser.email);
+      return loggedInUser;
+    }
+  } catch (e) {
+    print(e);
+  }
+}
+
+getCurrentUser2() async {
+  try {
+    final user = kAuth.currentUser;
+    if (user != null) {
+      User loggedInUser = user;
+      //print(loggedInUser.email);
       return loggedInUser;
     }
   } catch (e) {

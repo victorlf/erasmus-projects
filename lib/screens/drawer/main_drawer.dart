@@ -1,8 +1,11 @@
+import 'package:erasmus_projects/models/user_model.dart';
 import 'package:erasmus_projects/providers/drawer_active_screen.dart';
 import 'package:erasmus_projects/screens/home_screen.dart';
-import 'package:erasmus_projects/screens/publish_project_screen.dart';
+import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
 import 'package:erasmus_projects/screens/rate_us.dart';
+import 'package:erasmus_projects/services/authentication.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -114,47 +117,53 @@ class _MainDrawerState extends State<MainDrawer> {
             //     child: Align(
             //         alignment: Alignment.bottomLeft, child: Text('LOG OUT'))),
             Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ListTile(
-                    title: Text(
-                      kAuth.currentUser.email,
-                      //'Organization Name',
+                child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ListTile(
+                  title: FutureBuilder(
+                      future: UserModel(email: kAuth.currentUser.email)
+                          .getUserData(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        return snapshot.data != null
+                            ? Text(
+                                snapshot.data.name,
+                                //'Organization Name',
+                                style: TextStyle(
+                                  color: Colors.blue[900],
+                                ),
+                              )
+                            : Container();
+                      }),
+                ),
+                ListTile(
+                  title: Text(
+                    'LOG OUT',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                  onTap: () {
+                    kAuth.signOut();
+                    Navigator.pop(context);
+                    Navigator.pushNamed(context, HomeScreen.id);
+                  },
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10.0, bottom: 20.0),
+                    child: Text(
+                      'Powered by Oli Enterprise',
                       style: TextStyle(
-                        color: Colors.blue[900],
-                      ),
+                          color: kYellowGold, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  ListTile(
-                    title: Text(
-                      'LOG OUT',
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                    onTap: () {
-                      kAuth.signOut();
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, HomeScreen.id);
-                    },
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 10.0, bottom: 20.0),
-                      child: Text(
-                        'Powered by Oli Enterprise',
-                        style: TextStyle(
-                            color: kYellowGold, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                ),
+              ],
+            )),
           ],
         ),
       ),

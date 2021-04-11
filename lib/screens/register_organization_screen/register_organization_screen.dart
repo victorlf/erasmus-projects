@@ -210,11 +210,13 @@ class _RegisterOrganizationScreenState
 
                         if (validateAndSave(_formKey.currentState)) {
                           await registerOrganizationAuthentication(
-                              context,
-                              emailController.text,
-                              passwordController.text,
-                              isBoxChecked,
-                              organizationPicController.text);
+                            context,
+                            organizationNameController.text,
+                            organizationPicController.text,
+                            emailController.text,
+                            passwordController.text,
+                            isBoxChecked,
+                          );
                           setState(() {
                             showSpinner = false;
                           });

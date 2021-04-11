@@ -1,6 +1,6 @@
 import 'package:erasmus_projects/components/card_info.dart';
 import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
-import 'package:erasmus_projects/screens/publish_project_screen.dart';
+import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
 import 'package:erasmus_projects/services/authentication.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
@@ -18,13 +18,6 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   String dropdownValue1 = 'Recently Added';
   String dropdownValue2 = 'Country';
-
-  @override
-  void initState() {
-    super.initState();
-
-    getCurrentUser();
-  }
 
   @override
   Widget build(BuildContext context) {
