@@ -1,7 +1,10 @@
+import 'package:erasmus_projects/screens/program_screen/program_args.dart';
 import 'package:erasmus_projects/screens/program_screen/program_screen.dart';
+import 'package:erasmus_projects/services/get_files.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:readmore/readmore.dart';
 
 class InfoCard extends StatelessWidget {
   final String title;
@@ -95,19 +98,7 @@ class InfoCard extends StatelessWidget {
                     SizedBox(
                       width: 5.0,
                     ),
-                    for (String eligible in eligibles)
-                      Text(
-                        eligible,
-                        style: TextStyle(
-                          color: Colors.grey,
-                        ),
-                      ),
-                    // Text(
-                    //   'Croatia, Estonia, France, Italy',
-                    //   style: TextStyle(
-                    //     color: Colors.grey,
-                    //   ),
-                    // ),
+                    eligiblesList(eligibles),
                   ],
                 ),
               ],
@@ -117,11 +108,15 @@ class InfoCard extends StatelessWidget {
             left: -20.0,
             top: 20,
             child: FutureBuilder(
-                future: downloadURL(),
+                future: downloadURL(country),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   //if (!snapshot.hasData) return Center(child: kProgressCircle);
                   if (!snapshot.hasData) return Container();
-                  return snapshot.data;
+                  return CircleAvatar(
+                    radius: 30.0,
+                    backgroundImage: NetworkImage(snapshot.data),
+                    backgroundColor: Colors.transparent,
+                  );
                 }),
           ),
           Positioned(
@@ -130,7 +125,11 @@ class InfoCard extends StatelessWidget {
             child: GestureDetector(
               onTap: () {
                 print('ID: ${documentId}');
-                Navigator.pushNamed(context, ProgramScreen.id);
+                Navigator.pushNamed(
+                  context,
+                  ProgramScreen.id,
+                  arguments: ProgramArgs(documentId: documentId),
+                );
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -168,14 +167,38 @@ class InfoCard extends StatelessWidget {
     );
   }
 
-  Future downloadURL() async {
-    String downloadURL =
-        await kFirebaseStorage.ref('flags/${country}.jpg').getDownloadURL();
-
-    return CircleAvatar(
-      radius: 30.0,
-      backgroundImage: NetworkImage(downloadURL),
-      backgroundColor: Colors.transparent,
-    );
+  eligiblesList(eligibles) {
+    if (eligibles.length > 2) {
+      return Row(
+        children: [
+          for (String eligible in eligibles.sublist(0, 2))
+            Text(
+              '$eligible ',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          Text(
+            '...',
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 20.0,
+            ),
+          )
+        ],
+      );
+    } else {
+      return Row(
+        children: [
+          for (String eligible in eligibles)
+            Text(
+              '$eligible ',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            )
+        ],
+      );
+    }
   }
 }

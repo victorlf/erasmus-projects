@@ -113,7 +113,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        launch("https://ko-fi.com/olientreprise");
+                        launch("https://ko-fi.com/olientreprise",
+                            forceWebView: true);
                       },
                       child: FaIcon(
                         FontAwesomeIcons.coffee,

@@ -41,7 +41,7 @@ dependencies:
   connectivity: ^3.0.3
   flutter_tagging: ^3.0.0
   file_picker: ^3.0.1
-  path_provider: ^2.0.1
+  readmore: ^2.0.0
 
 dev_dependencies:
   flutter_test:

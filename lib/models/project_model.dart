@@ -73,7 +73,8 @@ class ProjectModel {
     }).then((value) async {
       print('Project Added');
       //return true;
-      bool isSuccess = await fileUpload(title, infopackPath, infopack);
+      bool isSuccess =
+          await fileUpload(title, infopackPath, infopack, deadline);
       return isSuccess;
     }).catchError((onError) {
       print("Failed to add user: $onError");
@@ -82,10 +83,10 @@ class ProjectModel {
   }
 }
 
-fileUpload(projectTitle, filePath, fileName) async {
+fileUpload(projectTitle, filePath, fileName, deadline) async {
   return await kFirebaseStorage
       .ref('projects')
-      .child('${projectTitle}')
+      .child('${projectTitle}_${fileName}_${deadline}')
       .child('${fileName}')
       .putFile(filePath)
       .then((value) {

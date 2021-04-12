@@ -11,7 +11,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_tagging/flutter_tagging.dart';
-import 'package:path_provider/path_provider.dart';
 import 'country_tags.dart';
 
 class PublishProjectScreen extends StatefulWidget {
@@ -755,7 +754,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                   setState(() {
                     formsTags = _validateTags();
                   });
-                  await fileUploadPath();
+
                   if (validateAndSave(_formKey.currentState) && formsTags) {
                     ProjectModel projectModel = ProjectModel(
                       title: titleController.text,
@@ -897,13 +896,5 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
     }
 
     return true;
-  }
-
-  Future<void> fileUploadPath() async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String filePath = '${appDocDir.absolute}/file-to-upload.png';
-    print('filepath: ${filePath}');
-    // ...
-    // e.g. await uploadFile(filePath);
   }
 }
