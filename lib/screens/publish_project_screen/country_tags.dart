@@ -1,18 +1,31 @@
 import 'package:flutter_tagging/flutter_tagging.dart';
 import 'package:flutter/material.dart';
 
+class ProjectService {
+  /// Mocks fetching language from network API with delay of 500ms.
+  static Future<List<TagItem>> getProjects(String query) async {
+    await Future.delayed(Duration(milliseconds: 500), null);
+    return <TagItem>[
+      TagItem(name: 'Self-Care', position: 1),
+      TagItem(name: 'Ukraine', position: 2),
+    ]
+        .where((lang) => lang.name.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+  }
+}
+
 /// LanguageService
 class CountryService {
   /// Mocks fetching language from network API with delay of 500ms.
-  static Future<List<Country>> getCountries(String query) async {
+  static Future<List<TagItem>> getCountries(String query) async {
     await Future.delayed(Duration(milliseconds: 500), null);
-    return <Country>[
-      Country(name: 'Brazil', position: 1),
-      Country(name: 'Portugal', position: 2),
-      Country(name: 'France', position: 3),
-      Country(name: 'Germany', position: 4),
-      Country(name: 'United States', position: 5),
-      Country(name: 'Argentina', position: 6),
+    return <TagItem>[
+      TagItem(name: 'Brazil', position: 1),
+      TagItem(name: 'Portugal', position: 2),
+      TagItem(name: 'France', position: 3),
+      TagItem(name: 'Germany', position: 4),
+      TagItem(name: 'United States', position: 5),
+      TagItem(name: 'Argentina', position: 6),
     ]
         .where((lang) => lang.name.toLowerCase().contains(query.toLowerCase()))
         .toList();
@@ -20,7 +33,7 @@ class CountryService {
 }
 
 /// Language Class
-class Country extends Taggable {
+class TagItem extends Taggable {
   ///
   final String name;
 
@@ -28,7 +41,7 @@ class Country extends Taggable {
   final int position;
 
   /// Creates Language
-  Country({
+  TagItem({
     @required this.name,
     @required this.position,
   });

@@ -23,7 +23,7 @@ class UserModel {
     return users
         .add({NAME: name, PIC: pic, EMAIL: email})
         .then((value) => print("User Added"))
-        .catchError(((onError) => print("Failed to add user: $onError")));
+        .catchError((onError) => print("Failed to add user: $onError"));
   }
 
   Future<UserModel> getUserData() async {

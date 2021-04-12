@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:erasmus_projects/components/form_input.dart';
+import 'package:erasmus_projects/models/project_model.dart';
+import 'package:erasmus_projects/screens/explore/explore_screen.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:erasmus_projects/utilities/forms_validation.dart';
 import 'package:file_picker/file_picker.dart';
@@ -9,6 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_tagging/flutter_tagging.dart';
+import 'package:path_provider/path_provider.dart';
 import 'country_tags.dart';
 
 class PublishProjectScreen extends StatefulWidget {
@@ -30,13 +33,20 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
   final projectDateBeginController = TextEditingController();
   final projectDateEndController = TextEditingController();
   final deadlineController = TextEditingController();
-  String dropdownValue = 'Youth Exchanges';
-  String dropdownValue2 =
+  String dropdownType = 'Youth Exchanges';
+  String dropdownCost =
       'This project is financed by the Erasmus+Youth Programme.';
-  String finalPath = 'Attach your Infopack    X';
 
-  List<Country> _selectedCountries = [];
-  String _selectedValuesJson = 'Nothing to show';
+  String _fileName = 'Click to Attach your Infopack';
+  File _filePath;
+  bool _emptyFileError = false;
+
+  List<TagItem> _selectedCountries = [];
+  String _selectedCountriesValuesJson = 'Nothing to show';
+  bool _emptyCountriesError = false;
+  List<TagItem> _selectedTags = [];
+  String _selectedTagsValuesJson = 'Nothing to show';
+  bool _emptyTagsError = false;
 
   DateTime selectedDate;
   @override
@@ -255,72 +265,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                 SizedBox(
                   height: 10.0,
                 ),
-                // Container(
-                //   padding: EdgeInsets.all(
-                //     10.0,
-                //   ),
-                //   decoration: BoxDecoration(
-                //     border: Border.all(
-                //       color: kYellowGold,
-                //     ),
-                //   ),
-                //   child: Wrap(
-                //     spacing: 2.0,
-                //     runSpacing: 5.0,
-                //     children: [
-                //       Text(
-                //         'Portugal X',
-                //         style: TextStyle(
-                //           color: Colors.blue[900],
-                //           backgroundColor: Colors.grey[300],
-                //         ),
-                //       ),
-                //       Text(
-                //         'England X',
-                //         style: TextStyle(
-                //           color: Colors.blue[900],
-                //           backgroundColor: Colors.grey[300],
-                //         ),
-                //       ),
-                //       Text(
-                //         'USA X',
-                //         style: TextStyle(
-                //           color: Colors.blue[900],
-                //           backgroundColor: Colors.grey[300],
-                //         ),
-                //       ),
-                //       Text(
-                //         'Ireland X',
-                //         style: TextStyle(
-                //           color: Colors.blue[900],
-                //           backgroundColor: Colors.grey[300],
-                //         ),
-                //       ),
-                //       Text(
-                //         'Turkey X',
-                //         style: TextStyle(
-                //           color: Colors.blue[900],
-                //           backgroundColor: Colors.grey[300],
-                //         ),
-                //       ),
-                //       Text(
-                //         'Peru X',
-                //         style: TextStyle(
-                //           color: Colors.blue[900],
-                //           backgroundColor: Colors.grey[300],
-                //         ),
-                //       ),
-                //       Text(
-                //         'Argentina X',
-                //         style: TextStyle(
-                //           color: Colors.blue[900],
-                //           backgroundColor: Colors.grey[300],
-                //         ),
-                //       ),
-                //     ],
-                //   ),
-                // ),
-                FlutterTagging<Country>(
+                FlutterTagging<TagItem>(
                     initialItems: _selectedCountries,
                     textFieldConfiguration: TextFieldConfiguration(
                       decoration: InputDecoration(
@@ -333,14 +278,14 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                     ),
                     findSuggestions: CountryService.getCountries,
                     additionCallback: (value) {
-                      return Country(
+                      return TagItem(
                         name: value,
                         position: 0,
                       );
                     },
-                    onAdded: (country) {
+                    onAdded: (tagItem) {
                       // api calls here, triggered when add to tag button is pressed
-                      return Country();
+                      return TagItem();
                     },
                     configureSuggestion: (lang) {
                       return SuggestionConfiguration(
@@ -371,15 +316,32 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                     },
                     onChanged: () {
                       setState(() {
-                        _selectedValuesJson = _selectedCountries
+                        _selectedCountriesValuesJson = _selectedCountries
                             .map<String>((lang) => '\n${lang.toJson()}')
                             .toList()
                             .toString();
-                        _selectedValuesJson =
-                            _selectedValuesJson.replaceFirst('}]', '}\n]');
+                        _selectedCountriesValuesJson =
+                            _selectedCountriesValuesJson.replaceFirst(
+                                '}]', '}\n]');
                       });
+                      // List f = _selectedCountries
+                      //     .map<String>((lang) => '${lang.name}')
+                      //     .toList();
+                      // print('List here');
+                      // print(f);
                     }),
-
+                SizedBox(
+                  height: 10.0,
+                ),
+                _emptyCountriesError
+                    ? Text(
+                        'Select at least a Country',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 12.0,
+                        ),
+                      )
+                    : Container(),
                 SizedBox(
                   height: 30.0,
                 ),
@@ -447,7 +409,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                 ),
                 DropdownButton<String>(
                   isExpanded: true,
-                  value: dropdownValue,
+                  value: dropdownType,
                   icon: FaIcon(
                     FontAwesomeIcons.angleDown,
                     color: Colors.blue[900],
@@ -457,7 +419,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                   style: TextStyle(color: Colors.blue[900]),
                   onChanged: (String newValue) {
                     setState(() {
-                      dropdownValue = newValue;
+                      dropdownType = newValue;
                     });
                   },
                   items: <String>[
@@ -547,37 +509,64 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                 SizedBox(
                   height: 10.0,
                 ),
-                Container(
-                  width: double.infinity,
-                  padding: EdgeInsets.all(
-                    10.0,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: kYellowGold,
+                FlutterTagging<TagItem>(
+                    initialItems: _selectedTags,
+                    textFieldConfiguration: TextFieldConfiguration(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: Colors.grey.withAlpha(30),
+                        hintText: 'Search Tags',
+                        labelText: 'Select Tags',
+                      ),
                     ),
-                  ),
-                  child: Wrap(
-                    spacing: 2.0,
-                    runSpacing: 5.0,
-                    children: [
-                      Text(
-                        'Self-care X',
-                        style: TextStyle(
-                          color: Colors.blue[900],
-                          backgroundColor: Colors.grey[300],
-                        ),
-                      ),
-                      Text(
-                        'Ukraine X',
-                        style: TextStyle(
-                          color: Colors.blue[900],
-                          backgroundColor: Colors.grey[300],
-                        ),
-                      ),
-                    ],
-                  ),
+                    findSuggestions: ProjectService.getProjects,
+                    additionCallback: (value) {
+                      return TagItem(
+                        name: value,
+                        position: 0,
+                      );
+                    },
+                    onAdded: (tagItem) {
+                      // api calls here, triggered when add to tag button is pressed
+                      return TagItem();
+                    },
+                    configureSuggestion: (lang) {
+                      return SuggestionConfiguration(
+                        title: Text(lang.name),
+                        subtitle: Text(lang.position.toString()),
+                      );
+                    },
+                    configureChip: (lang) {
+                      return ChipConfiguration(
+                        label: Text(lang.name),
+                        backgroundColor: Colors.grey[300],
+                        labelStyle: TextStyle(color: Colors.blue[900]),
+                        deleteIconColor: Colors.white,
+                      );
+                    },
+                    onChanged: () {
+                      setState(() {
+                        _selectedTagsValuesJson = _selectedTags
+                            .map<String>((lang) => '\n${lang.toJson()}')
+                            .toList()
+                            .toString();
+                        _selectedTagsValuesJson =
+                            _selectedTagsValuesJson.replaceFirst('}]', '}\n]');
+                      });
+                    }),
+                SizedBox(
+                  height: 10.0,
                 ),
+                _emptyTagsError
+                    ? Text(
+                        'Select at least a Tag',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontSize: 12.0,
+                        ),
+                      )
+                    : Container(),
                 SizedBox(
                   height: 30.0,
                 ),
@@ -603,18 +592,19 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                       allowedExtensions: ['pdf', 'doc', 'docx'],
                     );
                     if (result != null) {
-                      //File file = File(result.files.single.path);
-                      PlatformFile file = result.files.single;
+                      File file = File(result.files.single.path);
+                      PlatformFile platformFile = result.files.single;
                       print(file.path);
                       setState(() {
-                        finalPath = file.name;
+                        _fileName = platformFile.name;
+                        _filePath = file;
                       });
                     } else {
                       // User canceled the picker
                     }
                   },
                   child: Text(
-                    finalPath,
+                    _fileName,
                     style: TextStyle(
                       color: Colors.blue[900],
                       backgroundColor: Colors.grey[300],
@@ -623,6 +613,18 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                 ),
               ],
             ),
+            SizedBox(
+              height: 10.0,
+            ),
+            _emptyFileError
+                ? Text(
+                    'Select a File',
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 12.0,
+                    ),
+                  )
+                : Container(),
             SizedBox(
               height: 30.0,
             ),
@@ -637,7 +639,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                 ),
                 DropdownButton<String>(
                   isExpanded: true,
-                  value: dropdownValue2,
+                  value: dropdownCost,
                   icon: FaIcon(
                     FontAwesomeIcons.angleDown,
                     color: Colors.blue[900],
@@ -647,7 +649,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                   style: TextStyle(color: Colors.blue[900]),
                   onChanged: (String newValue) {
                     setState(() {
-                      dropdownValue2 = newValue;
+                      dropdownCost = newValue;
                     });
                   },
                   items: <String>[
@@ -749,13 +751,101 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                   setState(() {
                     showSpinner = true;
                   });
-                  if (validateAndSave(_formKey.currentState) &&
-                      _selectedCountries.isNotEmpty) {
+                  bool formsTags;
+                  setState(() {
+                    formsTags = _validateTags();
+                  });
+                  await fileUploadPath();
+                  if (validateAndSave(_formKey.currentState) && formsTags) {
+                    ProjectModel projectModel = ProjectModel(
+                      title: titleController.text,
+                      beginDate: projectDateBeginController.text,
+                      endDate: projectDateEndController.text,
+                      venue: venueController.text,
+                      organization: organizationNameController.text,
+                      eligible: _selectedCountries
+                          .map<String>((lang) => '${lang.name}')
+                          .toList(),
+                      deadline: deadlineController.text,
+                      type: dropdownType,
+                      description: descriptionController.text,
+                      tags: _selectedTags
+                          .map<String>((lang) => '${lang.name}')
+                          .toList(),
+                      infopack: _fileName,
+                      infopackPath: _filePath,
+                      cost: dropdownCost,
+                      contact: contactController.text,
+                      applyButton: applyButtonController.text,
+                    );
+                    bool isUploadOk = await projectModel.addSnapshot();
+                    if (isUploadOk) {
+                      showDialog<void>(
+                        context: context,
+                        barrierDismissible: false, // user must tap button!
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Project Published'),
+                            content: SingleChildScrollView(
+                              child: ListBody(
+                                children: <Widget>[
+                                  Text(
+                                    'Project is up!',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                  Navigator.pushNamedAndRemoveUntil(
+                                    context,
+                                    ExploreScreen.id,
+                                    ModalRoute.withName(ExploreScreen.id),
+                                  );
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else {
+                      showDialog<void>(
+                        context: context,
+                        barrierDismissible: false, // user must tap button!
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Publishing Error'),
+                            content: SingleChildScrollView(
+                              child: ListBody(
+                                children: <Widget>[
+                                  Text(
+                                    'Project was not publish!',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            actions: <Widget>[
+                              TextButton(
+                                child: Text('OK'),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
                     setState(() {
+                      print('Form did pass');
                       showSpinner = false;
                     });
                   } else {
                     setState(() {
+                      print('Form didn\'t pass');
                       showSpinner = false;
                     });
                   }
@@ -794,5 +884,26 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
             "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
         controller.text = date;
       });
+  }
+
+  bool _validateTags() {
+    _emptyCountriesError = _selectedCountries.isEmpty;
+    _emptyTagsError = _selectedTags.isEmpty;
+    //_emptyFileError = (_fileName == 'Click to Attach your Infopack');
+
+    //if (_emptyCountriesError || _emptyTagsError || _emptyFileError) {
+    if (_emptyCountriesError || _emptyTagsError) {
+      return false;
+    }
+
+    return true;
+  }
+
+  Future<void> fileUploadPath() async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String filePath = '${appDocDir.absolute}/file-to-upload.png';
+    print('filepath: ${filePath}');
+    // ...
+    // e.g. await uploadFile(filePath);
   }
 }
