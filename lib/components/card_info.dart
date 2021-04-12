@@ -40,12 +40,10 @@ class InfoCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              SizedBox(height: 10.0),
               Row(
                 children: [
-                  Icon(
-                    Icons.location_on,
-                    color: Colors.red,
-                  ),
+                  iconImage('assets/images/icons/location.png'),
                   SizedBox(
                     width: 5.0,
                   ),
@@ -59,10 +57,7 @@ class InfoCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Icon(
-                    Icons.calendar_today_rounded,
-                    color: Colors.blue[600],
-                  ),
+                  iconImage('assets/images/icons/calendar.png'),
                   SizedBox(
                     width: 5.0,
                   ),
@@ -76,10 +71,7 @@ class InfoCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  Icon(
-                    Icons.map,
-                    color: Colors.green[600],
-                  ),
+                  iconImage('assets/images/icons/finish.png'),
                   SizedBox(
                     width: 5.0,
                   ),
@@ -128,6 +120,19 @@ class InfoCard extends StatelessWidget {
           ),
         )
       ],
+    );
+  }
+
+  iconImage(String imagePath) {
+    return Container(
+      width: 15.0,
+      height: 20.0,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: AssetImage(imagePath),
+        ),
+      ),
     );
   }
 }
