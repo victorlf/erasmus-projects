@@ -1,3 +1,5 @@
+//import 'dart:html';
+
 import 'package:erasmus_projects/components/card_info.dart';
 import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
@@ -23,8 +25,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: MainDrawer(),
-      body: ListView(
-        //crossAxisAlignment: CrossAxisAlignment.center,
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Stack(
             clipBehavior: Clip.none,
@@ -61,7 +63,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
             height: 10.0,
           ),
           Padding(
-            padding: const EdgeInsets.all(25.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
             child: Column(
               children: [
                 Row(
@@ -167,11 +170,36 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     ),
                   ],
                 ),
-                InfoCard(),
-                SizedBox(height: 10.0),
-                InfoCard(),
-                SizedBox(height: 10.0),
-                InfoCard(),
+                StreamBuilder(
+                    stream:
+                        kFirebaseFirestore.collection('projects').snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData)
+                        return Center(child: kProgressCircle);
+                      return Container(
+                        width: double.infinity,
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        child: ListView.builder(
+                          itemCount: snapshot.data.size,
+                          itemBuilder: (context, index) => Column(
+                            children: [
+                              InfoCard(
+                                title: snapshot.data.docs[index]['title'],
+                                country: snapshot.data.docs[index]['venue'],
+                                beginDate: snapshot.data.docs[index]
+                                    ['beginDate'],
+                                endDate: snapshot.data.docs[index]['endDate'],
+                                eligibles: snapshot.data.docs[index]
+                                    ['eligible'],
+                              ),
+                              SizedBox(
+                                height: 10.0,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }),
               ],
             ),
           ),
@@ -180,7 +208,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 return snapshot.data != null
                     ? Padding(
-                        padding: const EdgeInsets.all(25.0),
+                        padding: const EdgeInsets.all(5.0),
                         child: ElevatedButton(
                           onPressed: () {
                             Navigator.pushNamed(
