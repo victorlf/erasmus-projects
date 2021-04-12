@@ -1,4 +1,4 @@
-import 'package:erasmus_projects/screens/program_screen.dart';
+import 'package:erasmus_projects/screens/program_screen/program_screen.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,6 +9,7 @@ class InfoCard extends StatelessWidget {
   final String beginDate;
   final String endDate;
   final List eligibles;
+  final String documentId;
 
   InfoCard({
     this.title,
@@ -16,6 +17,7 @@ class InfoCard extends StatelessWidget {
     this.beginDate,
     this.endDate,
     this.eligibles,
+    this.documentId,
   });
 
   @override
@@ -115,7 +117,7 @@ class InfoCard extends StatelessWidget {
             left: -20.0,
             top: 20,
             child: FutureBuilder(
-                future: downloadURLExample(),
+                future: downloadURL(),
                 builder: (BuildContext context, AsyncSnapshot snapshot) {
                   //if (!snapshot.hasData) return Center(child: kProgressCircle);
                   if (!snapshot.hasData) return Container();
@@ -127,6 +129,7 @@ class InfoCard extends StatelessWidget {
             top: 30,
             child: GestureDetector(
               onTap: () {
+                print('ID: ${documentId}');
                 Navigator.pushNamed(context, ProgramScreen.id);
               },
               child: Container(
@@ -165,7 +168,7 @@ class InfoCard extends StatelessWidget {
     );
   }
 
-  Future downloadURLExample() async {
+  Future downloadURL() async {
     String downloadURL =
         await kFirebaseStorage.ref('flags/${country}.jpg').getDownloadURL();
 

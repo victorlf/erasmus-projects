@@ -20,6 +20,7 @@ class ExploreScreen extends StatefulWidget {
 class _ExploreScreenState extends State<ExploreScreen> {
   String dropdownValue1 = 'Recently Added';
   String dropdownValue2 = 'Country';
+  double listHeight = 0.6;
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +179,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         return Center(child: kProgressCircle);
                       return Container(
                         width: double.infinity,
-                        height: MediaQuery.of(context).size.height * 0.6,
+                        height: MediaQuery.of(context).size.height * listHeight,
                         child: ListView.builder(
                           itemCount: snapshot.data.size,
                           itemBuilder: (context, index) => Column(
@@ -191,6 +192,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                 endDate: snapshot.data.docs[index]['endDate'],
                                 eligibles: snapshot.data.docs[index]
                                     ['eligible'],
+                                documentId:
+                                    snapshot.data.docs[index].reference.id,
                               ),
                               SizedBox(
                                 height: 10.0,
@@ -206,30 +209,33 @@ class _ExploreScreenState extends State<ExploreScreen> {
           FutureBuilder(
               future: getCurrentUser(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
-                return snapshot.data != null
-                    ? Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, PublishProjectScreen.id);
-                          },
-                          child: Text(
-                            "Publish",
-                            style: TextStyle(
-                              color: kYellowGold,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14.0,
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.blue[900],
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0)),
-                          ),
+                if (snapshot.data != null) {
+                  listHeight = 0.6;
+                  return Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, PublishProjectScreen.id);
+                      },
+                      child: Text(
+                        "Publish",
+                        style: TextStyle(
+                          color: kYellowGold,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14.0,
                         ),
-                      )
-                    : Container();
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue[900],
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0)),
+                      ),
+                    ),
+                  );
+                } else {
+                  listHeight = 0.7;
+                  return Container();
+                }
               }),
         ],
       ),
