@@ -148,6 +148,9 @@ class ProgramScreen extends StatelessWidget {
                             'Eligible Countries:',
                             style: TextStyle(color: kYellowGold),
                           ),
+                          SizedBox(
+                            width: 25.0,
+                          ),
                           for (String eligible in snapshot.data['eligible'])
                             Text(
                               eligible,
@@ -180,6 +183,9 @@ class ProgramScreen extends StatelessWidget {
                           Text(
                             'Description:',
                             style: TextStyle(color: kYellowGold),
+                          ),
+                          SizedBox(
+                            width: 25.0,
                           ),
                           Text(
                             //'BfT serves as a platform to contribute to exploring the next steps to be undertaken in the ETS development and to reflect on what role Erasmus+ Youth Programme and the European Solidarity Corps could play in this. BfT takes place every two years and is a conference concept bringing together experienced trainers, other training providers, and Erasmus+ Youth Programme and European Solidarity Corps NA/SALTO RC staff working with trainers / trainer pools to reflect on trends and core issues in the youth field and effects on the work of trainers. In 2020, trainers and training providers with existing training strategies for trainers at national or international level are invited to join the first online edition of Bridges for Trainers and explore the changes that the field went through in the past months – mostly due to the COVID-19 crisis, as well as what is ahead of us (role of training, new programmes, change of learning spaces and approaches, etc.).',
@@ -228,6 +234,24 @@ class ProgramScreen extends StatelessWidget {
                         title: 'Cost',
                         info: snapshot.data['cost'],
                       ),
+                      snapshot.data['cost'] == 'Customized'
+                          ? Wrap(
+                              children: [
+                                Text(
+                                  'Customized Cost Description:',
+                                  style: TextStyle(color: kYellowGold),
+                                ),
+                                SizedBox(
+                                  width: 25.0,
+                                ),
+                                Text(
+                                  snapshot.data['customizedCost'],
+                                  style: TextStyle(color: Colors.grey),
+                                  textAlign: TextAlign.justify,
+                                ),
+                              ],
+                            )
+                          : Container(),
                       SizedBox(
                         height: 10.0,
                       ),

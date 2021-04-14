@@ -28,6 +28,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
   final cityController = TextEditingController();
   final organizationNameController = TextEditingController();
   final descriptionController = TextEditingController();
+  final customiedCostController = TextEditingController();
   final contactController = TextEditingController();
   final applyButtonController = TextEditingController();
   final projectDateBeginController = TextEditingController();
@@ -63,6 +64,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
     cityController.dispose();
     organizationNameController.dispose();
     descriptionController.dispose();
+    customiedCostController.dispose();
     contactController.dispose();
     applyButtonController.dispose();
     projectDateBeginController.dispose();
@@ -718,7 +720,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                   },
                   items: <String>[
                     'This project is financed by the Erasmus+Youth Programme.',
-                    'Costumized',
+                    'Customized',
                   ].map<DropdownMenuItem<String>>((String value) {
                     return DropdownMenuItem<String>(
                       value: value,
@@ -726,6 +728,46 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                     );
                   }).toList(),
                 ),
+                dropdownCost == 'Customized'
+                    ? TextFormField(
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        minLines: 5,
+                        style: TextStyle(
+                          color: Colors.grey,
+                        ),
+                        decoration: InputDecoration(
+                            contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.blue[900],
+                                width: 2.0,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: kYellowGold,
+                                width: 1.0,
+                              ),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.red[900],
+                                width: 2.0,
+                              ),
+                            ),
+                            hintText: 'Describe your financial cost',
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            )),
+                        controller: customiedCostController,
+                        validator: (String value) {
+                          if (value.isEmpty) {
+                            return 'Descrption is Empty';
+                          }
+                        },
+                      )
+                    : Container(),
                 SizedBox(
                   height: 30.0,
                 ),
@@ -841,6 +883,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                       infopack: _fileName,
                       infopackPath: _filePath,
                       cost: dropdownCost,
+                      customizedCost: customiedCostController.text,
                       contact: contactController.text,
                       applyButton: applyButtonController.text,
                     );

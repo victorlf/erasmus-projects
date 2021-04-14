@@ -18,6 +18,7 @@ class ProjectModel {
   static const TAGS = 'tags';
   static const INFOPACK = 'infopack';
   static const COST = 'cost';
+  static const CUSTOMIZEDCOST = 'customizedCost';
   static const CONTACT = 'contact';
   static const APPLY = 'applyButton';
 
@@ -35,6 +36,7 @@ class ProjectModel {
   final List<String> tags;
   final String infopack;
   final String cost;
+  final String customizedCost;
   final String contact;
   final String applyButton;
   final File infopackPath;
@@ -55,6 +57,7 @@ class ProjectModel {
       this.infopack,
       this.infopackPath,
       this.cost,
+      this.customizedCost,
       this.contact,
       this.applyButton});
 
@@ -76,6 +79,7 @@ class ProjectModel {
       TAGS: tags,
       INFOPACK: infopack,
       COST: cost,
+      CUSTOMIZEDCOST: customizedCost,
       CONTACT: contact,
       APPLY: applyButton,
     }).then((value) async {
