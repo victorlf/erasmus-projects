@@ -184,10 +184,11 @@ class _RegisterOrganizationScreenState
                         ),
                         activeColor: Colors.blue[900],
                         value: timeDilation != 1.0,
+                        //value: true,
                         onChanged: (bool value) {
                           setState(() {
                             isBoxChecked = !isBoxChecked;
-                            timeDilation = value ? 10.0 : 1.0;
+                            timeDilation = value ? 2.0 : 1.0;
                           });
                         },
                       ),
