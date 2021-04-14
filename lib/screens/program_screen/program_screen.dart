@@ -38,7 +38,8 @@ class ProgramScreen extends StatelessWidget {
                       children: [
                         Positioned(
                             child: FutureBuilder(
-                                future: downloadURL(snapshot.data['venue']),
+                                //future: downloadURL(snapshot.data['venue']),
+                                future: downloadURL(snapshot.data['country']),
                                 builder: (BuildContext context,
                                     AsyncSnapshot snapshot) {
                                   //if (!snapshot.hasData) return Center(child: kProgressCircle);
@@ -121,9 +122,20 @@ class ProgramScreen extends StatelessWidget {
                       SizedBox(
                         height: 10.0,
                       ),
+                      // InfoData(
+                      //   title: 'Venue',
+                      //   info: snapshot.data['venue'],
+                      // ),
                       InfoData(
-                        title: 'Venue',
-                        info: snapshot.data['venue'],
+                        title: 'City',
+                        info: snapshot.data['city'],
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      InfoData(
+                        title: 'Country',
+                        info: snapshot.data['country'],
                       ),
                       SizedBox(
                         height: 10.0,

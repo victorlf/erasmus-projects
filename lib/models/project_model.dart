@@ -7,7 +7,9 @@ class ProjectModel {
   static const TITLE = 'title';
   static const BEGIN = 'beginDate';
   static const END = 'endDate';
-  static const VENUE = 'venue';
+  //static const VENUE = 'venue';
+  static const CITY = 'city';
+  static const COUNTRY = 'country';
   static const ORGANIZATION = 'organization';
   static const ELIGIBLE = 'eligible';
   static const DEADLINE = 'deadline';
@@ -22,7 +24,9 @@ class ProjectModel {
   final String title;
   final String beginDate;
   final String endDate;
-  final String venue;
+  //final String venue;
+  final String city;
+  final String country;
   final String organization;
   final List<String> eligible;
   final String deadline;
@@ -39,7 +43,9 @@ class ProjectModel {
       {this.title,
       this.beginDate,
       this.endDate,
-      this.venue,
+      //this.venue,
+      this.city,
+      this.country,
       this.organization,
       this.eligible,
       this.deadline,
@@ -59,7 +65,9 @@ class ProjectModel {
       TITLE: title,
       BEGIN: beginDate,
       END: endDate,
-      VENUE: venue,
+      //VENUE: venue,
+      CITY: city,
+      COUNTRY: country,
       ORGANIZATION: organization,
       ELIGIBLE: eligible,
       DEADLINE: deadline,
@@ -73,7 +81,7 @@ class ProjectModel {
     }).then((value) async {
       print('Project Added');
       bool isSuccess;
-      infopack.isNotEmpty
+      infopackPath != null
           ? isSuccess =
               await fileUpload(title, infopackPath, infopack, deadline)
           : isSuccess = true;

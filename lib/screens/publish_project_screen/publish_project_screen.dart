@@ -24,7 +24,8 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
   bool showSpinner = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final titleController = TextEditingController();
-  final venueController = TextEditingController();
+  //final venueController = TextEditingController();
+  final cityController = TextEditingController();
   final organizationNameController = TextEditingController();
   final descriptionController = TextEditingController();
   final contactController = TextEditingController();
@@ -32,6 +33,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
   final projectDateBeginController = TextEditingController();
   final projectDateEndController = TextEditingController();
   final deadlineController = TextEditingController();
+  String dropdownCountry = 'Portugal';
   String dropdownType = 'Youth Exchanges';
   String dropdownCost =
       'This project is financed by the Erasmus+Youth Programme.';
@@ -57,7 +59,8 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
   @override
   void dispose() {
     titleController.dispose();
-    venueController.dispose();
+    //venueController.dispose();
+    cityController.dispose();
     organizationNameController.dispose();
     descriptionController.dispose();
     contactController.dispose();
@@ -232,16 +235,78 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                 ),
               ],
             ),
-            FormInput(
-              title: "Venue",
-              inputHint: 'City Country',
-              controller: venueController,
-              validator: (String value) {
-                if (value.isEmpty) {
-                  return 'Venue is Empty';
-                }
-              },
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Venue',
+                  style: TextStyle(
+                    color: kYellowGold,
+                  ),
+                ),
+                Container(
+                  width: 300.0,
+                  child: TextFormField(
+                    controller: cityController,
+                    decoration: InputDecoration(
+                      isDense: true,
+                      hintText: 'City',
+                      hintStyle: TextStyle(
+                        color: Colors.grey,
+                        fontSize: 12.0,
+                      ),
+                    ),
+                    validator: (String value) {
+                      if (value.isEmpty) {
+                        return 'City is Empty';
+                      }
+                    },
+                  ),
+                ),
+                DropdownButton<String>(
+                  isExpanded: true,
+                  value: dropdownCountry,
+                  icon: FaIcon(
+                    FontAwesomeIcons.angleDown,
+                    color: Colors.blue[900],
+                  ),
+                  iconSize: 14,
+                  elevation: 16,
+                  style: TextStyle(color: Colors.blue[900]),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      dropdownCountry = newValue;
+                    });
+                  },
+                  items: <String>[
+                    'Germany',
+                    'China',
+                    'Portugal',
+                    'Italy',
+                    'Poland',
+                    'Ireland',
+                  ].map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+              ],
             ),
+            // FormInput(
+            //   title: "Venue",
+            //   inputHint: 'City Country',
+            //   //controller: venueController,
+            //   validator: (String value) {
+            //     if (value.isEmpty) {
+            //       return 'Venue is Empty';
+            //     }
+            //   },
+            // ),
             FormInput(
               title: "Organization Name",
               inputHint: 'Enter Organization Name',
@@ -760,7 +825,9 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                       title: titleController.text,
                       beginDate: projectDateBeginController.text,
                       endDate: projectDateEndController.text,
-                      venue: venueController.text,
+                      //venue: venueController.text,
+                      city: cityController.text,
+                      country: dropdownCountry,
                       organization: organizationNameController.text,
                       eligible: _selectedCountries
                           .map<String>((lang) => '${lang.name}')

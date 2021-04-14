@@ -187,7 +187,8 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             children: [
                               InfoCard(
                                 title: snapshot.data.docs[index]['title'],
-                                country: snapshot.data.docs[index]['venue'],
+                                //country: snapshot.data.docs[index]['venue'],
+                                country: snapshot.data.docs[index]['country'],
                                 beginDate: snapshot.data.docs[index]
                                     ['beginDate'],
                                 endDate: snapshot.data.docs[index]['endDate'],
