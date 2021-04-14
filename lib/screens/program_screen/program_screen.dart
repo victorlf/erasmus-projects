@@ -180,32 +180,35 @@ class ProgramScreen extends StatelessWidget {
                       SizedBox(
                         height: 10.0,
                       ),
-                      Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Infopack',
-                              style: TextStyle(color: kYellowGold),
-                            ),
-                            SizedBox(
-                              width: 25.0,
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                launch(
-                                  await downloadInfopackURL(
-                                    snapshot.data['title'],
-                                    snapshot.data['infopack'],
-                                    snapshot.data['deadline'],
+                      (snapshot.data['infopack'] !=
+                              'Click to Attach your Infopack')
+                          ? Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                  Text(
+                                    'Infopack',
+                                    style: TextStyle(color: kYellowGold),
                                   ),
-                                );
-                              },
-                              child: Text(
-                                'Download',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ),
-                          ]),
+                                  SizedBox(
+                                    width: 25.0,
+                                  ),
+                                  GestureDetector(
+                                    onTap: () async {
+                                      launch(
+                                        await downloadInfopackURL(
+                                          snapshot.data['title'],
+                                          snapshot.data['infopack'],
+                                          snapshot.data['deadline'],
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Download',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
+                                  ),
+                                ])
+                          : Container(),
                       SizedBox(
                         height: 10.0,
                       ),

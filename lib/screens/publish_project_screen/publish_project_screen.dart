@@ -38,7 +38,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
 
   String _fileName = 'Click to Attach your Infopack';
   File _filePath;
-  bool _emptyFileError = false;
+  //bool _emptyFileError = false;
 
   List<TagItem> _selectedCountries = [];
   String _selectedCountriesValuesJson = 'Nothing to show';
@@ -615,18 +615,18 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
             SizedBox(
               height: 10.0,
             ),
-            _emptyFileError
-                ? Text(
-                    'Select a File',
-                    style: TextStyle(
-                      color: Colors.red,
-                      fontSize: 12.0,
-                    ),
-                  )
-                : Container(),
-            SizedBox(
-              height: 30.0,
-            ),
+            // _emptyFileError
+            //     ? Text(
+            //         'Select a File',
+            //         style: TextStyle(
+            //           color: Colors.red,
+            //           fontSize: 12.0,
+            //         ),
+            //       )
+            //     : Container(),
+            // SizedBox(
+            //   height: 30.0,
+            // ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -72,9 +72,11 @@ class ProjectModel {
       APPLY: applyButton,
     }).then((value) async {
       print('Project Added');
-      //return true;
-      bool isSuccess =
-          await fileUpload(title, infopackPath, infopack, deadline);
+      bool isSuccess;
+      infopack.isNotEmpty
+          ? isSuccess =
+              await fileUpload(title, infopackPath, infopack, deadline)
+          : isSuccess = true;
       return isSuccess;
     }).catchError((onError) {
       print("Failed to add user: $onError");
