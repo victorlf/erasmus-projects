@@ -1,4 +1,5 @@
 import 'package:erasmus_projects/providers/drawer_active_screen.dart';
+import 'package:erasmus_projects/screens/active_projects_screen.dart';
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
 import 'package:erasmus_projects/screens/home_screen.dart';
 import 'package:erasmus_projects/screens/organization_signin_screen.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
           ProgramScreen.id: (context) => ProgramScreen(),
           PublishProjectScreen.id: (context) => PublishProjectScreen(),
           RateUs.id: (context) => RateUs(),
+          ActiveProjectsScreen.id: (context) => ActiveProjectsScreen(),
         });
   }
 }
