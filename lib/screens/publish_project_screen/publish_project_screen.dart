@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:erasmus_projects/components/form_input.dart';
 import 'package:erasmus_projects/models/project_model.dart';
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
+import 'package:erasmus_projects/services/authentication.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:erasmus_projects/utilities/forms_validation.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:loading_overlay/loading_overlay.dart';
@@ -863,6 +865,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                   });
 
                   if (validateAndSave(_formKey.currentState) && formsTags) {
+                    User loggedInUser = await getCurrentUser();
                     ProjectModel projectModel = ProjectModel(
                       title: titleController.text,
                       beginDate: projectDateBeginController.text,
@@ -886,6 +889,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                       customizedCost: customiedCostController.text,
                       contact: contactController.text,
                       applyButton: applyButtonController.text,
+                      uid: loggedInUser.uid,
                     );
                     bool isUploadOk = await projectModel.addSnapshot();
                     if (isUploadOk) {

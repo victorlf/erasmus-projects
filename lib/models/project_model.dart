@@ -21,6 +21,7 @@ class ProjectModel {
   static const CUSTOMIZEDCOST = 'customizedCost';
   static const CONTACT = 'contact';
   static const APPLY = 'applyButton';
+  static const UID = 'uid';
 
   final String title;
   final String beginDate;
@@ -40,6 +41,7 @@ class ProjectModel {
   final String contact;
   final String applyButton;
   final File infopackPath;
+  final String uid;
 
   ProjectModel(
       {this.title,
@@ -59,7 +61,8 @@ class ProjectModel {
       this.cost,
       this.customizedCost,
       this.contact,
-      this.applyButton});
+      this.applyButton,
+      this.uid});
 
   CollectionReference projects = kFirebaseFirestore.collection('projects');
 
@@ -82,6 +85,7 @@ class ProjectModel {
       CUSTOMIZEDCOST: customizedCost,
       CONTACT: contact,
       APPLY: applyButton,
+      UID: uid,
     }).then((value) async {
       print('Project Added');
       bool isSuccess;
