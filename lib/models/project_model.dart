@@ -99,6 +99,40 @@ class ProjectModel {
       return false;
     });
   }
+
+  updateSnapshot(documentId) {
+    return projects.doc(documentId).update({
+      TITLE: title,
+      BEGIN: beginDate,
+      END: endDate,
+      //VENUE: venue,
+      CITY: city,
+      COUNTRY: country,
+      ORGANIZATION: organization,
+      ELIGIBLE: eligible,
+      DEADLINE: deadline,
+      TYPE: type,
+      DESCRIPTION: description,
+      TAGS: tags,
+      INFOPACK: infopack,
+      COST: cost,
+      CUSTOMIZEDCOST: customizedCost,
+      CONTACT: contact,
+      APPLY: applyButton,
+      UID: uid,
+    }).then((value) async {
+      print('Project Added');
+      bool isSuccess;
+      infopackPath != null
+          ? isSuccess =
+              await fileUpload(title, infopackPath, infopack, deadline)
+          : isSuccess = true;
+      return isSuccess;
+    }).catchError((onError) {
+      print("Failed to add user: $onError");
+      return false;
+    });
+  }
 }
 
 fileUpload(projectTitle, filePath, fileName, deadline) async {

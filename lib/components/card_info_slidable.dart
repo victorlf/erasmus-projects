@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:erasmus_projects/screens/program_screen/program_args.dart';
 import 'package:erasmus_projects/screens/program_screen/program_screen.dart';
+import 'package:erasmus_projects/screens/publish_project_screen/edit_project_screen.dart';
 import 'package:erasmus_projects/services/get_files.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:flutter/material.dart';
@@ -171,7 +172,14 @@ class InfoCardSlidable extends StatelessWidget {
             FontAwesomeIcons.edit,
             color: Colors.blue[900],
           ),
-          onTap: () => _showSnackBar(context, 'More'),
+          onTap: () {
+            //_showSnackBar(context, 'Edit');
+            Navigator.pushNamed(
+              context,
+              EditProjectScreen.id,
+              arguments: ProgramArgs(documentId: documentId),
+            );
+          },
         ),
         IconSlideAction(
           //caption: 'Delete',
@@ -181,7 +189,10 @@ class InfoCardSlidable extends StatelessWidget {
             FontAwesomeIcons.trash,
             color: Colors.blue[900],
           ),
-          onTap: () => _showSnackBar(context, 'Delete'),
+          onTap: () => kFirebaseFirestore
+              .collection('projects')
+              .doc(documentId)
+              .delete(),
         ),
       ],
     );
