@@ -1,10 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:erasmus_projects/screens/program_screen/program_args.dart';
 import 'package:erasmus_projects/screens/program_screen/program_screen.dart';
 import 'package:erasmus_projects/services/get_files.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:readmore/readmore.dart';
 
 class InfoCard extends StatelessWidget {
   final String title;
@@ -14,14 +14,13 @@ class InfoCard extends StatelessWidget {
   final List eligibles;
   final String documentId;
 
-  InfoCard({
-    this.title,
-    this.country,
-    this.beginDate,
-    this.endDate,
-    this.eligibles,
-    this.documentId,
-  });
+  InfoCard(
+      {this.title,
+      this.country,
+      this.beginDate,
+      this.endDate,
+      this.eligibles,
+      this.documentId});
 
   @override
   Widget build(BuildContext context) {

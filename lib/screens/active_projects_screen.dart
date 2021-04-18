@@ -1,14 +1,16 @@
 //import 'dart:html';
 
 import 'package:erasmus_projects/components/card_info.dart';
+import 'package:erasmus_projects/components/card_info_slidable.dart';
 import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
 import 'package:erasmus_projects/services/authentication.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:flutter/material.dart';
 
 class ActiveProjectsScreen extends StatefulWidget {
   static const String id = "active_projects_screen";
@@ -120,7 +122,7 @@ class _ActiveProjectsScreenState extends State<ActiveProjectsScreen> {
                                     itemCount: snapshot.data.size,
                                     itemBuilder: (context, index) => Column(
                                       children: [
-                                        InfoCard(
+                                        InfoCardSlidable(
                                           title: snapshot.data.docs[index]
                                               ['title'],
                                           //country: snapshot.data.docs[index]['venue'],
