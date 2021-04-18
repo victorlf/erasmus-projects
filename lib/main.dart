@@ -22,7 +22,7 @@ void main() async {
       providers: [
         ChangeNotifierProvider(
           create: (context) => DrawerActiveScreen(
-            PublishProjectScreen.id,
+            ExploreScreen.id,
           ),
         )
       ],
