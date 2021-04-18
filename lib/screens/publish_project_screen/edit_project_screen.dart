@@ -961,8 +961,9 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                     User loggedInUser = await getCurrentUser();
                     ProjectModel projectModel = ProjectModel(
                       title: titleController.text,
-                      beginDate: projectDateBeginController.text,
-                      endDate: projectDateEndController.text,
+                      beginDate:
+                          DateTime.parse(projectDateBeginController.text),
+                      endDate: DateTime.parse(projectDateEndController.text),
                       //venue: venueController.text,
                       city: cityController.text,
                       country: dropdownCountry,
@@ -970,7 +971,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                       eligible: _selectedCountries
                           .map<String>((lang) => '${lang.name}')
                           .toList(),
-                      deadline: deadlineController.text,
+                      deadline: DateTime.parse(deadlineController.text),
                       type: dropdownType,
                       description: descriptionController.text,
                       tags: _selectedTags

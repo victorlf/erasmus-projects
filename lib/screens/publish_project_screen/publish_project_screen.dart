@@ -881,8 +881,9 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                     User loggedInUser = await getCurrentUser();
                     ProjectModel projectModel = ProjectModel(
                       title: titleController.text,
-                      beginDate: projectDateBeginController.text,
-                      endDate: projectDateEndController.text,
+                      beginDate:
+                          DateTime.parse(projectDateBeginController.text),
+                      endDate: DateTime.parse(projectDateEndController.text),
                       //venue: venueController.text,
                       city: cityController.text,
                       country: dropdownCountry,
@@ -890,7 +891,7 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                       eligible: _selectedCountries
                           .map<String>((lang) => '${lang.name}')
                           .toList(),
-                      deadline: deadlineController.text,
+                      deadline: DateTime.parse(deadlineController.text),
                       type: dropdownType,
                       description: descriptionController.text,
                       tags: _selectedTags
@@ -1006,9 +1007,10 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        var date =
-            "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
-        controller.text = date;
+        // var date =
+        //     "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
+        // controller.text = date;
+        controller.text = picked.toString();
       });
   }
 

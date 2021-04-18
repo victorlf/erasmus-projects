@@ -3,6 +3,7 @@ import 'package:erasmus_projects/models/project_model.dart';
 import 'package:erasmus_projects/screens/program_screen/program_args.dart';
 import 'package:erasmus_projects/services/get_files.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
+import 'package:erasmus_projects/utilities/date_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -117,7 +118,7 @@ class ProgramScreen extends StatelessWidget {
                       InfoData(
                         title: 'Dates',
                         info:
-                            '${snapshot.data['beginDate']} - ${snapshot.data['endDate']}',
+                            '${parseDateToString(snapshot.data['beginDate'].toDate())} - ${parseDateToString(snapshot.data['endDate'].toDate())}',
                       ),
                       SizedBox(
                         height: 10.0,
@@ -166,7 +167,8 @@ class ProgramScreen extends StatelessWidget {
                       ),
                       InfoData(
                         title: 'Application deadline',
-                        info: snapshot.data['deadline'],
+                        info:
+                            '${parseDateToString(snapshot.data['deadline'].toDate())}',
                       ),
                       SizedBox(
                         height: 10.0,

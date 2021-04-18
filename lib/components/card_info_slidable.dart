@@ -5,6 +5,7 @@ import 'package:erasmus_projects/screens/program_screen/program_screen.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/edit_project_screen.dart';
 import 'package:erasmus_projects/services/get_files.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
+import 'package:erasmus_projects/utilities/date_to_string.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,8 +13,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class InfoCardSlidable extends StatelessWidget {
   final String title;
   final String country;
-  final String beginDate;
-  final String endDate;
+  final DateTime beginDate;
+  final DateTime endDate;
   final List eligibles;
   final String documentId;
 
@@ -97,7 +98,7 @@ class InfoCardSlidable extends StatelessWidget {
                       ),
                       Text(
                         //'27th Oct - 4th Nov',
-                        '${beginDate} - ${endDate}',
+                        '${parseDateToString(beginDate)} - ${parseDateToString(endDate)}',
                         style: TextStyle(
                           color: Colors.grey,
                         ),

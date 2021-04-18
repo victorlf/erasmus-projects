@@ -128,10 +128,12 @@ class _ActiveProjectsScreenState extends State<ActiveProjectsScreen> {
                                           //country: snapshot.data.docs[index]['venue'],
                                           country: snapshot.data.docs[index]
                                               ['country'],
-                                          beginDate: snapshot.data.docs[index]
-                                              ['beginDate'],
-                                          endDate: snapshot.data.docs[index]
-                                              ['endDate'],
+                                          beginDate: snapshot
+                                              .data.docs[index]['beginDate']
+                                              .toDate(),
+                                          endDate: snapshot
+                                              .data.docs[index]['endDate']
+                                              .toDate(),
                                           eligibles: snapshot.data.docs[index]
                                               ['eligible'],
                                           documentId: snapshot

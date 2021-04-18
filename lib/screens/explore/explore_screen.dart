@@ -1,5 +1,6 @@
 //import 'dart:html';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:erasmus_projects/components/card_info.dart';
 import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
@@ -21,6 +22,40 @@ class _ExploreScreenState extends State<ExploreScreen> {
   String dropdownValue1 = 'Recently Added';
   String dropdownValue2 = 'Country';
   double listHeight = 0.6;
+  DateTime selectedDate;
+  Stream streamFromDatabase =
+      kFirebaseFirestore.collection('projects').snapshots();
+
+  getProjects(String dropdownValue1, String dropdownValue2) async {
+    //setState(() {
+    if (dropdownValue2 != 'Country' && dropdownValue1 != 'Recently Added') {
+      streamFromDatabase = kFirebaseFirestore
+          .collection('projects')
+          .where('country', isEqualTo: dropdownValue2)
+          .orderBy('deadline')
+          .snapshots();
+    } else if (dropdownValue2 != 'Country') {
+      streamFromDatabase = kFirebaseFirestore
+          .collection('projects')
+          .where('country', isEqualTo: dropdownValue2)
+          .snapshots();
+    } else if (dropdownValue1 != 'Recently Added') {
+      streamFromDatabase = kFirebaseFirestore
+          .collection('projects')
+          .orderBy('deadline')
+          .snapshots();
+    } else {
+      streamFromDatabase =
+          kFirebaseFirestore.collection('projects').snapshots();
+    }
+    //});
+  }
+
+  @override
+  initState() {
+    super.initState();
+    selectedDate = DateTime.now();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +173,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       onChanged: (String newValue) {
                         setState(() {
                           dropdownValue1 = newValue;
+                          getProjects(dropdownValue1, dropdownValue2);
                         });
                       },
                       items: <String>['Recently Added', 'Near deadline']
@@ -160,10 +196,19 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       onChanged: (String newValue) {
                         setState(() {
                           dropdownValue2 = newValue;
+                          getProjects(dropdownValue1, dropdownValue2);
                         });
                       },
-                      items: <String>['Country', 'Portugal', 'Spain']
-                          .map<DropdownMenuItem<String>>((String value) {
+                      items: <String>[
+                        'Country',
+                        'Brazil',
+                        'Portugal',
+                        'France',
+                        'Germany',
+                        'United States',
+                        'Argentina',
+                        'Italy',
+                      ].map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -173,8 +218,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   ],
                 ),
                 StreamBuilder(
-                    stream:
-                        kFirebaseFirestore.collection('projects').snapshots(),
+                    // stream: dropdownValue2 != 'Country'
+                    //     ? kFirebaseFirestore
+                    //         .collection('projects')
+                    //         .where('country', isEqualTo: dropdownValue2)
+                    //         .snapshots()
+                    //     : kFirebaseFirestore.collection('projects').snapshots(),
+                    stream: streamFromDatabase,
                     builder: (context, snapshot) {
                       if (!snapshot.hasData)
                         return Center(child: kProgressCircle);
@@ -189,9 +239,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                 title: snapshot.data.docs[index]['title'],
                                 //country: snapshot.data.docs[index]['venue'],
                                 country: snapshot.data.docs[index]['country'],
-                                beginDate: snapshot.data.docs[index]
-                                    ['beginDate'],
-                                endDate: snapshot.data.docs[index]['endDate'],
+                                beginDate: snapshot
+                                    .data.docs[index]['beginDate']
+                                    .toDate(),
+                                endDate: snapshot.data.docs[index]['endDate']
+                                    .toDate(),
                                 eligibles: snapshot.data.docs[index]
                                     ['eligible'],
                                 documentId:

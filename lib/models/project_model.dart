@@ -24,14 +24,15 @@ class ProjectModel {
   static const UID = 'uid';
 
   final String title;
-  final String beginDate;
-  final String endDate;
+  //final String beginDate;
+  final DateTime beginDate;
+  final DateTime endDate;
   //final String venue;
   final String city;
   final String country;
   final String organization;
   final List<String> eligible;
-  final String deadline;
+  final DateTime deadline;
   final String type;
   final String description;
   final List<String> tags;
