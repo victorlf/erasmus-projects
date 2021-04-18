@@ -1,6 +1,7 @@
 import 'package:erasmus_projects/models/user_model.dart';
 import 'package:erasmus_projects/providers/drawer_active_screen.dart';
 import 'package:erasmus_projects/screens/active_projects_screen.dart';
+import 'package:erasmus_projects/screens/delete_account_screen.dart';
 import 'package:erasmus_projects/screens/home_screen.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
 import 'package:erasmus_projects/screens/rate_us.dart';
@@ -29,7 +30,7 @@ class _MainDrawerState extends State<MainDrawer> {
     ListItem('Publish Projects', PublishProjectScreen.id),
     ListItem('Active Projects', ActiveProjectsScreen.id),
     //ListItem(Icons.favorite, 'Favorites', Favorites.id),
-    //ListItem(Icons.help, 'Help', Help.id),
+    ListItem('Delete Account', DeleteAccountScreen.id),
     ListItem('Rate Us', RateUs.id),
   ];
 
