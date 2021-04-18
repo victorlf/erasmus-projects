@@ -23,8 +23,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
   String dropdownValue2 = 'Country';
   double listHeight = 0.6;
   DateTime selectedDate;
-  Stream streamFromDatabase =
-      kFirebaseFirestore.collection('projects').snapshots();
+  Stream streamFromDatabase = kFirebaseFirestore
+      .collection('projects')
+      .orderBy('createdAt', descending: true)
+      .snapshots();
 
   getProjects(String dropdownValue1, String dropdownValue2) async {
     //setState(() {
@@ -45,8 +47,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
           .orderBy('deadline')
           .snapshots();
     } else {
-      streamFromDatabase =
-          kFirebaseFirestore.collection('projects').snapshots();
+      streamFromDatabase = kFirebaseFirestore
+          .collection('projects')
+          .orderBy('createdAt', descending: true)
+          .snapshots();
     }
     //});
   }

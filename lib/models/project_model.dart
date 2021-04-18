@@ -22,6 +22,7 @@ class ProjectModel {
   static const CONTACT = 'contact';
   static const APPLY = 'applyButton';
   static const UID = 'uid';
+  static const CREATEDAT = 'createdAt';
 
   final String title;
   //final String beginDate;
@@ -87,6 +88,7 @@ class ProjectModel {
       CONTACT: contact,
       APPLY: applyButton,
       UID: uid,
+      CREATEDAT: DateTime.now(),
     }).then((value) async {
       print('Project Added');
       bool isSuccess;
