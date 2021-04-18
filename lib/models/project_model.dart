@@ -133,6 +133,16 @@ class ProjectModel {
       return false;
     });
   }
+
+  deleteSnapshot(documentId) {
+    return projects.doc(documentId).delete().then((value) async {
+      print('Project Deleted');
+      return true;
+    }).catchError((onError) {
+      print("Failed to delete project: $onError");
+      return false;
+    });
+  }
 }
 
 fileUpload(projectTitle, filePath, fileName, deadline) async {

@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:erasmus_projects/models/project_model.dart';
 import 'package:erasmus_projects/screens/program_screen/program_args.dart';
 import 'package:erasmus_projects/screens/program_screen/program_screen.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/edit_project_screen.dart';
@@ -189,10 +190,71 @@ class InfoCardSlidable extends StatelessWidget {
             FontAwesomeIcons.trash,
             color: Colors.blue[900],
           ),
-          onTap: () => kFirebaseFirestore
-              .collection('projects')
-              .doc(documentId)
-              .delete(),
+          onTap: () async {
+            showDialog<void>(
+              context: context,
+              barrierDismissible: false, // user must tap button!
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Project'),
+                  content: SingleChildScrollView(
+                    child: ListBody(
+                      children: <Widget>[
+                        Text(
+                          'Do you really want to delete this project?',
+                        ),
+                      ],
+                    ),
+                  ),
+                  actions: <Widget>[
+                    TextButton(
+                      child: Text('OK'),
+                      onPressed: () async {
+                        ProjectModel projectModel = ProjectModel();
+                        bool isDeleteOk =
+                            await projectModel.deleteSnapshot(documentId);
+                        if (isDeleteOk) return Navigator.of(context).pop();
+                      },
+                    ),
+                    TextButton(
+                      child: Text('Cancel'),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                );
+              },
+            );
+            // } else {
+            //   return showDialog<void>(
+            //     context: context,
+            //     barrierDismissible: false, // user must tap button!
+            //     builder: (BuildContext context) {
+            //       return AlertDialog(
+            //         title: Text('Error'),
+            //         content: SingleChildScrollView(
+            //           child: ListBody(
+            //             children: <Widget>[
+            //               Text(
+            //                 'Project was not deleted!',
+            //               ),
+            //             ],
+            //           ),
+            //         ),
+            //         actions: <Widget>[
+            //           TextButton(
+            //             child: Text('OK'),
+            //             onPressed: () {
+            //               Navigator.of(context).pop();
+            //             },
+            //           ),
+            //         ],
+            //       );
+            //     },
+            //   );
+            // }
+          },
         ),
       ],
     );
