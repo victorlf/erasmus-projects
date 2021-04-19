@@ -23,6 +23,7 @@ class ProjectModel {
   static const APPLY = 'applyButton';
   static const UID = 'uid';
   static const CREATEDAT = 'createdAt';
+  static const FAVOURITES = 'favourites';
 
   final String title;
   //final String beginDate;
@@ -44,6 +45,7 @@ class ProjectModel {
   final String applyButton;
   final File infopackPath;
   final String uid;
+  final List<String> favourites = [];
 
   ProjectModel(
       {this.title,
@@ -89,6 +91,7 @@ class ProjectModel {
       APPLY: applyButton,
       UID: uid,
       CREATEDAT: DateTime.now(),
+      FAVOURITES: favourites,
     }).then((value) async {
       print('Project Added');
       bool isSuccess;
@@ -143,6 +146,30 @@ class ProjectModel {
       return true;
     }).catchError((onError) {
       print("Failed to delete project: $onError");
+      return false;
+    });
+  }
+
+  addToFavourites(uid, documentId) {
+    return projects.doc(documentId).update({
+      FAVOURITES: FieldValue.arrayUnion([uid])
+    }).then((value) async {
+      print('Add to Favourites');
+      return true;
+    }).catchError((onError) {
+      print("Failed to add to favourites: $onError");
+      return false;
+    });
+  }
+
+  removeFromFavourites(uid, documentId) {
+    return projects.doc(documentId).update({
+      FAVOURITES: FieldValue.arrayRemove([uid])
+    }).then((value) async {
+      print('Removed from Favourites');
+      return true;
+    }).catchError((onError) {
+      print("Failed to remove from favourites: $onError");
       return false;
     });
   }

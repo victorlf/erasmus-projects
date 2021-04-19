@@ -1,18 +1,38 @@
 import 'package:erasmus_projects/components/info_data.dart';
 import 'package:erasmus_projects/models/project_model.dart';
 import 'package:erasmus_projects/screens/program_screen/program_args.dart';
+import 'package:erasmus_projects/services/authentication.dart';
 import 'package:erasmus_projects/services/get_files.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:erasmus_projects/utilities/date_to_string.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class ProgramScreen extends StatelessWidget {
+class ProgramScreen extends StatefulWidget {
   static const String id = 'program_screen';
 
   @override
+  _ProgramScreenState createState() => _ProgramScreenState();
+}
+
+class _ProgramScreenState extends State<ProgramScreen> {
+  bool isFav = false;
+
+  @override
   Widget build(BuildContext context) {
+    favoriteHeart(bool isFav) {
+      if (isFav) {
+        return FaIcon(
+          FontAwesomeIcons.solidHeart,
+          color: Colors.red,
+        );
+      } else {
+        return FaIcon(FontAwesomeIcons.heart);
+      }
+    }
+
     final ProgramArgs args =
         ModalRoute.of(context).settings.arguments as ProgramArgs;
 
@@ -87,7 +107,38 @@ class ProgramScreen extends StatelessWidget {
                                   Positioned(
                                     right: 10.0,
                                     top: 20,
-                                    child: FaIcon(FontAwesomeIcons.heart),
+                                    child: FutureBuilder(
+                                        future: getCurrentUser(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot snapshotUser) {
+                                          if (!snapshotUser.hasData)
+                                            return Container();
+                                          User loggedInUser = snapshotUser.data;
+                                          String uid = loggedInUser.uid;
+                                          List favouritesList =
+                                              snapshot.data['favourites'];
+                                          isFav = favouritesList.contains(uid);
+                                          return GestureDetector(
+                                              onTap: () async {
+                                                ProjectModel p = ProjectModel();
+                                                bool isSuccess = false;
+                                                if (!isFav) {
+                                                  isSuccess =
+                                                      await p.addToFavourites(
+                                                          uid, args.documentId);
+                                                } else {
+                                                  isSuccess = await p
+                                                      .removeFromFavourites(
+                                                          uid, args.documentId);
+                                                }
+                                                if (isSuccess) {
+                                                  setState(() {
+                                                    isFav = !isFav;
+                                                  });
+                                                }
+                                              },
+                                              child: favoriteHeart(isFav));
+                                        }),
                                   ),
                                 ],
                               ),
