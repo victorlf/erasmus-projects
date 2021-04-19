@@ -3,6 +3,7 @@ import 'package:erasmus_projects/screens/active_projects_screen.dart';
 import 'package:erasmus_projects/screens/delete_account_screen.dart';
 import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
+import 'package:erasmus_projects/screens/favoutires_projects_screen.dart';
 import 'package:erasmus_projects/screens/home_screen.dart';
 import 'package:erasmus_projects/screens/organization_signin_screen.dart';
 import 'package:erasmus_projects/screens/program_screen/program_screen.dart';
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
           ActiveProjectsScreen.id: (context) => ActiveProjectsScreen(),
           EditProjectScreen.id: (context) => EditProjectScreen(),
           DeleteAccountScreen.id: (context) => DeleteAccountScreen(),
+          FavouritesProjectsScreen.id: (context) => FavouritesProjectsScreen(),
         });
   }
 }

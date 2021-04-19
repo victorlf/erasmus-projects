@@ -3,6 +3,7 @@ import 'package:erasmus_projects/providers/drawer_active_screen.dart';
 import 'package:erasmus_projects/screens/active_projects_screen.dart';
 import 'package:erasmus_projects/screens/delete_account_screen.dart';
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
+import 'package:erasmus_projects/screens/favoutires_projects_screen.dart';
 import 'package:erasmus_projects/screens/home_screen.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
 import 'package:erasmus_projects/screens/rate_us.dart';
@@ -31,6 +32,7 @@ class _MainDrawerState extends State<MainDrawer> {
     ListItem('Explore', ExploreScreen.id),
     ListItem('Publish Projects', PublishProjectScreen.id),
     ListItem('Active Projects', ActiveProjectsScreen.id),
+    ListItem('Favourites Projects', FavouritesProjectsScreen.id),
     //ListItem(Icons.favorite, 'Favorites', Favorites.id),
     ListItem('Delete Account', DeleteAccountScreen.id),
     ListItem('Rate Us', RateUs.id),
@@ -77,7 +79,7 @@ class _MainDrawerState extends State<MainDrawer> {
     return Drawer(
       child: Container(
         color: Colors.white,
-        child: Column(
+        child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(
