@@ -79,7 +79,7 @@ class _MainDrawerState extends State<MainDrawer> {
     return Drawer(
       child: Container(
         color: Colors.white,
-        child: ListView(
+        child: Column(
           children: <Widget>[
             UserAccountsDrawerHeader(
               decoration: BoxDecoration(
