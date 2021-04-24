@@ -44,6 +44,7 @@ class _MainDrawerState extends State<MainDrawer> {
     return Consumer<DrawerActiveScreen>(
         builder: (context, screenActive, child) {
       return Container(
+        height: 45.0,
         //margin: EdgeInsets.symmetric(vertical: 4),
         // color: item.screen == screenActive.screenName
         //     ? Colors.blue[100]
@@ -77,72 +78,71 @@ class _MainDrawerState extends State<MainDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                //color: Colors.blue,
-                image: DecorationImage(
-                    image: AssetImage('assets/images/bandeira.jpeg')),
-              ),
-              currentAccountPicture: GestureDetector(
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4.0),
-                    child: Container(
-                      padding: EdgeInsets.all(4.0),
-                      decoration: new BoxDecoration(
-                        borderRadius:
-                            new BorderRadius.all(new Radius.circular(50.0)),
-                        border: new Border.all(
-                          color: kYellowGold,
-                          width: 2.0,
-                        ),
-                      ),
-                      child: CircleAvatar(
-                        radius: 30.0,
-                        backgroundImage:
-                            AssetImage('assets/images/profile.png'),
-                        backgroundColor: Colors.transparent,
-                      ),
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  //Navigator.pushNamed(context, PublishProjectScreen.id);
-                },
-              ),
-              //accountName: Text('Doguinho'),
+      child: Column(
+        children: <Widget>[
+          UserAccountsDrawerHeader(
+            decoration: BoxDecoration(
+              //color: Colors.blue,
+              image: DecorationImage(
+                  image: AssetImage('assets/images/bandeira.jpeg')),
             ),
-            for (var item in _list) _getListItemTile(context, item),
-            // Text('Organization Name'),
-            // Expanded(
-            //     child: Align(
-            //         alignment: Alignment.bottomLeft, child: Text('LOG OUT'))),
-            Expanded(
-                child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ListTile(
-                  title: FutureBuilder(
-                      future: UserModel(email: kAuth.currentUser.email)
-                          .getUserData(),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        return snapshot.data != null
-                            ? Text(
-                                snapshot.data.name,
-                                //'Organization Name',
-                                style: TextStyle(
-                                  color: Colors.blue[900],
-                                ),
-                              )
-                            : Container();
-                      }),
-                ),
-                ListTile(
+            // currentAccountPicture: GestureDetector(
+            //   child: CircleAvatar(
+            //     backgroundColor: Colors.white,
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(4.0),
+            //       child: Container(
+            //         padding: EdgeInsets.all(4.0),
+            //         decoration: new BoxDecoration(
+            //           borderRadius:
+            //               new BorderRadius.all(new Radius.circular(50.0)),
+            //           border: new Border.all(
+            //             color: kYellowGold,
+            //             width: 2.0,
+            //           ),
+            //         ),
+            //         child: CircleAvatar(
+            //           radius: 30.0,
+            //           backgroundImage: AssetImage('assets/images/profile.png'),
+            //           backgroundColor: Colors.transparent,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            //   onTap: () {
+            //     //Navigator.pushNamed(context, PublishProjectScreen.id);
+            //   },
+            // ),
+            //accountName: Text('Doguinho'),
+          ),
+          for (var item in _list) _getListItemTile(context, item),
+          // Text('Organization Name'),
+          // Expanded(
+          //     child: Align(
+          //         alignment: Alignment.bottomLeft, child: Text('LOG OUT'))),
+          Expanded(
+              child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              ListTile(
+                title: FutureBuilder(
+                    future:
+                        UserModel(email: kAuth.currentUser.email).getUserData(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      return snapshot.data != null
+                          ? Text(
+                              snapshot.data.name,
+                              //'Organization Name',
+                              style: TextStyle(
+                                color: Colors.blue[900],
+                              ),
+                            )
+                          : Container();
+                    }),
+              ),
+              Container(
+                height: 45.0,
+                child: ListTile(
                   title: Text(
                     'LOG OUT',
                     style: TextStyle(
@@ -157,21 +157,21 @@ class _MainDrawerState extends State<MainDrawer> {
                     Navigator.pushNamed(context, HomeScreen.id);
                   },
                 ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 10.0, bottom: 20.0),
-                    child: Text(
-                      'Powered by Oli Enterprise',
-                      style: TextStyle(
-                          color: kYellowGold, fontWeight: FontWeight.bold),
-                    ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10.0, bottom: 20.0),
+                  child: Text(
+                    'Powered by Oli Enterprise',
+                    style: TextStyle(
+                        color: kYellowGold, fontWeight: FontWeight.bold),
                   ),
                 ),
-              ],
-            )),
-          ],
-        ),
+              ),
+            ],
+          )),
+        ],
       ),
     );
   }
