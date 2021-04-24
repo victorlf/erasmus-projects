@@ -939,7 +939,7 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
                           width: 2.0,
                         ),
                       ),
-                      hintText: 'Insert form link or e-mail',
+                      hintText: 'Insert form link formated as http:// ...',
                       hintStyle: TextStyle(
                         color: Colors.grey,
                       )),
