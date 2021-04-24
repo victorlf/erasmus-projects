@@ -20,6 +20,17 @@ class ProgramScreen extends StatefulWidget {
 class _ProgramScreenState extends State<ProgramScreen> {
   bool isFav = false;
 
+  Future<bool> isApplyButtonEnabled(url) async {
+    bool isUrl = await canLaunch(url) ? true : false;
+    return isUrl;
+  }
+
+  Function launchFuntion(url) {
+    return () {
+      launch(url, forceWebView: true);
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     favoriteHeart(bool isFav) {
@@ -315,25 +326,42 @@ class _ProgramScreenState extends State<ProgramScreen> {
                       SizedBox(
                         height: 10.0,
                       ),
-                      ElevatedButton(
-                        onPressed: () {
-                          launch(snapshot.data['applyButton'],
-                              forceWebView: true);
-                        },
-                        child: Text(
-                          "Apply",
-                          style: TextStyle(
-                            color: kYellowGold,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14.0,
-                          ),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.blue[900],
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0)),
-                        ),
-                      ),
+                      FutureBuilder(
+                          future: isApplyButtonEnabled(
+                              snapshot.data['applyButton']),
+                          builder: (BuildContext context,
+                              AsyncSnapshot snapshotApplyButton) {
+                            return snapshotApplyButton.data != null
+                                ? ElevatedButton(
+                                    onPressed: snapshotApplyButton.data
+                                        ? launchFuntion(
+                                            snapshot.data['applyButton'])
+                                        : null,
+                                    child: snapshotApplyButton.data
+                                        ? Text(
+                                            "Apply",
+                                            style: TextStyle(
+                                              color: kYellowGold,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14.0,
+                                            ),
+                                          )
+                                        : Text(
+                                            'Link is not working',
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 14.0,
+                                            ),
+                                          ),
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.blue[900],
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(30.0)),
+                                    ),
+                                  )
+                                : Container();
+                          }),
                     ],
                   ),
                 ),
