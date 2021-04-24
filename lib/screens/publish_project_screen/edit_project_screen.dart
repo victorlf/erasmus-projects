@@ -8,6 +8,7 @@ import 'package:erasmus_projects/screens/explore/explore_screen.dart';
 import 'package:erasmus_projects/screens/program_screen/program_args.dart';
 import 'package:erasmus_projects/services/authentication.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
+import 'package:erasmus_projects/utilities/date_to_string.dart';
 import 'package:erasmus_projects/utilities/forms_validation.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -80,12 +81,15 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
         .get();
 
     titleController.text = await snapshot.data()['title'];
-    projectDateBeginController.text = await snapshot.data()['beginDate'];
-    projectDateEndController.text = await snapshot.data()['endDate'];
+    projectDateBeginController.text =
+        await snapshot.data()['beginDate'].toDate().toString();
+    projectDateEndController.text =
+        await snapshot.data()['endDate'].toDate().toString();
     cityController.text = await snapshot.data()['city'];
     dropdownCountry = await snapshot.data()['country'];
     organizationNameController.text = await snapshot.data()['organization'];
-    deadlineController.text = await snapshot.data()['deadline'];
+    deadlineController.text =
+        await snapshot.data()['deadline'].toDate().toString();
     dropdownType = await snapshot.data()['type'];
     descriptionController.text = await snapshot.data()['description'];
     contactController.text = await snapshot.data()['contact'];
@@ -1089,9 +1093,10 @@ class _EditProjectScreenState extends State<EditProjectScreen> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        var date =
-            "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
-        controller.text = date;
+        // var date =
+        //     "${picked.toLocal().day}/${picked.toLocal().month}/${picked.toLocal().year}";
+        // controller.text = date;
+        controller.text = picked.toString();
       });
   }
 
