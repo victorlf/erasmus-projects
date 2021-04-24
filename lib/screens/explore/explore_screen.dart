@@ -1,6 +1,4 @@
 //import 'dart:html';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:erasmus_projects/components/card_info.dart';
 import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
@@ -9,7 +7,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class ExploreScreen extends StatefulWidget {
   static const String id = "explore_screen";
@@ -55,6 +52,42 @@ class _ExploreScreenState extends State<ExploreScreen> {
     //});
   }
 
+  final TextEditingController _filter = TextEditingController();
+  String _searchText = '';
+
+  getInfoCard(snapshot, index) {
+    return Column(
+      children: [
+        InfoCard(
+          title: snapshot.data.docs[index]['title'],
+          //country: snapshot.data.docs[index]['venue'],
+          country: snapshot.data.docs[index]['country'],
+          beginDate: snapshot.data.docs[index]['beginDate'].toDate(),
+          endDate: snapshot.data.docs[index]['endDate'].toDate(),
+          eligibles: snapshot.data.docs[index]['eligible'],
+          documentId: snapshot.data.docs[index].reference.id,
+        ),
+        SizedBox(
+          height: 10.0,
+        ),
+      ],
+    );
+  }
+
+  _ExploreScreenState() {
+    _filter.addListener(() {
+      if (_filter.text.isEmpty) {
+        setState(() {
+          _searchText = '';
+        });
+      } else {
+        setState(() {
+          _searchText = _filter.text;
+        });
+      }
+    });
+  }
+
   @override
   initState() {
     super.initState();
@@ -64,6 +97,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       drawer: MainDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -131,6 +165,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       width: MediaQuery.of(context).size.width * 0.65,
                       child: TextField(
                         //style: TextStyle(height: 0.2),
+                        controller: _filter,
                         decoration: InputDecoration(
                             isDense: true,
                             contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 0),
@@ -222,12 +257,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   ],
                 ),
                 StreamBuilder(
-                    // stream: dropdownValue2 != 'Country'
-                    //     ? kFirebaseFirestore
-                    //         .collection('projects')
-                    //         .where('country', isEqualTo: dropdownValue2)
-                    //         .snapshots()
-                    //     : kFirebaseFirestore.collection('projects').snapshots(),
                     stream: streamFromDatabase,
                     builder: (context, snapshot) {
                       if (!snapshot.hasData)
@@ -237,27 +266,19 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         height: MediaQuery.of(context).size.height * listHeight,
                         child: ListView.builder(
                           itemCount: snapshot.data.size,
-                          itemBuilder: (context, index) => Column(
-                            children: [
-                              InfoCard(
-                                title: snapshot.data.docs[index]['title'],
-                                //country: snapshot.data.docs[index]['venue'],
-                                country: snapshot.data.docs[index]['country'],
-                                beginDate: snapshot
-                                    .data.docs[index]['beginDate']
-                                    .toDate(),
-                                endDate: snapshot.data.docs[index]['endDate']
-                                    .toDate(),
-                                eligibles: snapshot.data.docs[index]
-                                    ['eligible'],
-                                documentId:
-                                    snapshot.data.docs[index].reference.id,
-                              ),
-                              SizedBox(
-                                height: 10.0,
-                              ),
-                            ],
-                          ),
+                          itemBuilder: (context, index) {
+                            if (_searchText.isNotEmpty) {
+                              if (snapshot.data.docs[index]['title']
+                                  .toLowerCase()
+                                  .contains(_searchText.toLowerCase())) {
+                                return getInfoCard(snapshot, index);
+                              } else {
+                                return Container();
+                              }
+                            } else {
+                              return getInfoCard(snapshot, index);
+                            }
+                          },
                         ),
                       );
                     }),
