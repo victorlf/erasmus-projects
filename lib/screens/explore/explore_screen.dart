@@ -2,12 +2,15 @@
 import 'package:erasmus_projects/components/card_info.dart';
 import 'package:erasmus_projects/models/user_model.dart';
 import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
+import 'package:erasmus_projects/screens/explore/explore_tutorial.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
 import 'package:erasmus_projects/services/authentication.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:flutter/material.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -18,10 +21,48 @@ class ExploreScreen extends StatefulWidget {
 }
 
 class _ExploreScreenState extends State<ExploreScreen> {
+  TutorialCoachMark tutorialCoachMark;
+  List<TargetFocus> targets = <TargetFocus>[];
+  GlobalKey keyButtonDrawer = GlobalKey();
+  GlobalKey keyButtonCoffee = GlobalKey();
+
   String dropdownValue1 = 'Recently Added';
   String dropdownValue2 = 'Country';
   double listHeight = 0.6;
   DateTime selectedDate;
+
+  final TextEditingController _filter = TextEditingController();
+  String _searchText = '';
+
+  void showTutorial() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    if (prefs.getBool('watchedIntro') == null) {
+      tutorialCoachMark = TutorialCoachMark(
+        context,
+        targets: targets,
+        colorShadow: Colors.blue,
+        textSkip: "SKIP",
+        paddingFocus: 10,
+        opacityShadow: 0.8,
+        onFinish: () {
+          print("finish");
+        },
+        onClickTarget: (target) {
+          print('onClickTarget: $target');
+        },
+        onSkip: () {
+          print("skip");
+        },
+        onClickOverlay: (target) {
+          print('onClickOverlay: $target');
+        },
+      )..show();
+
+      prefs.setBool('watchedIntro', true);
+    }
+  }
+
   Stream streamFromDatabase = kFirebaseFirestore
       .collection('projects')
       .orderBy('createdAt', descending: true)
@@ -53,9 +94,6 @@ class _ExploreScreenState extends State<ExploreScreen> {
     }
     //});
   }
-
-  final TextEditingController _filter = TextEditingController();
-  String _searchText = '';
 
   getInfoCard(snapshot, index) {
     return Column(
@@ -94,6 +132,14 @@ class _ExploreScreenState extends State<ExploreScreen> {
   initState() {
     super.initState();
     selectedDate = DateTime.now();
+    initTargets(targets, keyButtonDrawer, keyButtonCoffee);
+    showTutorial();
+  }
+
+  @override
+  dispose() {
+    tutorialCoachMark.finish();
+    super.dispose();
   }
 
   @override
@@ -166,6 +212,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                                   },
                                   child: FaIcon(
                                     FontAwesomeIcons.userCircle,
+                                    key: keyButtonDrawer,
                                     color: kYellowGold,
                                   ),
                                 ),
@@ -204,6 +251,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       },
                       child: FaIcon(
                         FontAwesomeIcons.coffee,
+                        key: keyButtonCoffee,
                         color: kYellowGold,
                       ),
                     ),

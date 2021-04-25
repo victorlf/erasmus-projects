@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:erasmus_projects/components/form_input.dart';
 import 'package:erasmus_projects/models/project_model.dart';
-import 'package:erasmus_projects/screens/active_projects_screen.dart';
+import 'package:erasmus_projects/screens/active_projects_screen/active_projects_screen.dart';
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
 import 'package:erasmus_projects/screens/program_screen/program_args.dart';
 import 'package:erasmus_projects/services/authentication.dart';

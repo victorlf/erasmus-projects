@@ -1,5 +1,5 @@
 import 'package:erasmus_projects/providers/drawer_active_screen.dart';
-import 'package:erasmus_projects/screens/active_projects_screen.dart';
+import 'package:erasmus_projects/screens/active_projects_screen/active_projects_screen.dart';
 import 'package:erasmus_projects/screens/delete_account_screen.dart';
 import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
 import 'package:erasmus_projects/screens/explore/explore_screen.dart';
