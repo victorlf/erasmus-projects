@@ -42,7 +42,9 @@ dependencies:
   flutter_tagging: ^3.0.0
   file_picker: ^3.0.1
   flutter_slidable: ^0.6.0
-  cached_network_image: ^3.0.0
+  #cached_network_image: ^3.0.0
+  shared_preferences: ^2.0.5
+
   
 
 dev_dependencies:

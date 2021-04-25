@@ -1,11 +1,13 @@
 //import 'dart:html';
 import 'package:erasmus_projects/components/card_info.dart';
+import 'package:erasmus_projects/models/user_model.dart';
 import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
 import 'package:erasmus_projects/services/authentication.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 class ExploreScreen extends StatefulWidget {
@@ -150,8 +152,18 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         return snapshot.data != null
                             ? Builder(
                                 builder: (context) => GestureDetector(
-                                  onTap: () =>
-                                      Scaffold.of(context).openDrawer(),
+                                  onTap: () async {
+                                    SharedPreferences prefs =
+                                        await SharedPreferences.getInstance();
+                                    if (prefs.getString('userName') == null) {
+                                      UserModel user = await UserModel(
+                                              email: kAuth.currentUser.email)
+                                          .getUserData();
+                                      await prefs.setString(
+                                          'userName', user.name);
+                                    }
+                                    Scaffold.of(context).openDrawer();
+                                  },
                                   child: FaIcon(
                                     FontAwesomeIcons.userCircle,
                                     color: kYellowGold,

@@ -12,6 +12,7 @@ import 'package:erasmus_projects/utilities/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainDrawer extends StatefulWidget {
   const MainDrawer({
@@ -75,6 +76,11 @@ class _MainDrawerState extends State<MainDrawer> {
     });
   }
 
+  getPrefsUserName() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getString('userName');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -126,12 +132,13 @@ class _MainDrawerState extends State<MainDrawer> {
             children: [
               ListTile(
                 title: FutureBuilder(
-                    future:
-                        UserModel(email: kAuth.currentUser.email).getUserData(),
+                    // future:
+                    //     UserModel(email: kAuth.currentUser.email).getUserData(),
+                    future: getPrefsUserName(),
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       return snapshot.data != null
                           ? Text(
-                              snapshot.data.name,
+                              snapshot.data,
                               //'Organization Name',
                               style: TextStyle(
                                 color: Colors.blue[900],

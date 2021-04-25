@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:erasmus_projects/models/project_model.dart';
 import 'package:erasmus_projects/screens/program_screen/program_args.dart';
 import 'package:erasmus_projects/screens/program_screen/program_screen.dart';
