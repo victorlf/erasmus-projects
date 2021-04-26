@@ -351,10 +351,10 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                         position: 0,
                       );
                     },
-                    onAdded: (tagItem) {
-                      // api calls here, triggered when add to tag button is pressed
-                      return TagItem();
-                    },
+                    // onAdded: (tagItem) {
+                    //   // api calls here, triggered when add to tag button is pressed
+                    //   return tagItem;
+                    // },
                     configureSuggestion: (lang) {
                       return SuggestionConfiguration(
                         title: Text(lang.name),
@@ -597,25 +597,25 @@ class _PublishProjectScreenState extends State<PublishProjectScreen> {
                     },
                     onAdded: (tagItem) {
                       // api calls here, triggered when add to tag button is pressed
-                      return TagItem();
+                      return tagItem;
                     },
                     configureSuggestion: (lang) {
                       return SuggestionConfiguration(
                         title: Text(lang.name),
                         subtitle: Text(lang.position.toString()),
-                        // additionWidget: Chip(
-                        //   avatar: Icon(
-                        //     Icons.add_circle,
-                        //     color: Colors.white,
-                        //   ),
-                        //   label: Text('Add New Tag'),
-                        //   labelStyle: TextStyle(
-                        //     color: Colors.white,
-                        //     fontSize: 14.0,
-                        //     fontWeight: FontWeight.w300,
-                        //   ),
-                        //   backgroundColor: Colors.blue[900],
-                        // ),
+                        additionWidget: Chip(
+                          avatar: Icon(
+                            Icons.add_circle,
+                            color: Colors.white,
+                          ),
+                          label: Text('Add New Tag'),
+                          labelStyle: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14.0,
+                            fontWeight: FontWeight.w300,
+                          ),
+                          backgroundColor: Colors.blue[900],
+                        ),
                       );
                     },
                     configureChip: (lang) {
