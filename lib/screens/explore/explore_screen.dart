@@ -1,10 +1,13 @@
 //import 'dart:html';
+import 'dart:convert';
+
 import 'package:erasmus_projects/components/card_info.dart';
 import 'package:erasmus_projects/models/user_model.dart';
 import 'package:erasmus_projects/screens/drawer/main_drawer.dart';
 import 'package:erasmus_projects/screens/explore/explore_tutorial.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
 import 'package:erasmus_projects/services/authentication.dart';
+import 'package:erasmus_projects/services/load_json_files.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
@@ -283,36 +286,50 @@ class _ExploreScreenState extends State<ExploreScreen> {
                         );
                       }).toList(),
                     ),
-                    DropdownButton<String>(
-                      value: dropdownValue2,
-                      icon: const FaIcon(
-                        FontAwesomeIcons.angleDown,
-                        color: kYellowGold,
-                      ),
-                      iconSize: 14,
-                      elevation: 16,
-                      style: const TextStyle(color: kYellowGold),
-                      onChanged: (String newValue) {
-                        setState(() {
-                          dropdownValue2 = newValue;
-                          getProjects(dropdownValue1, dropdownValue2);
-                        });
-                      },
-                      items: <String>[
-                        'Country',
-                        'Brazil',
-                        'Portugal',
-                        'France',
-                        'Germany',
-                        'United States',
-                        'Argentina',
-                        'Italy',
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
+                    StreamBuilder(
+                      stream: kFirebaseFirestore
+                          .collection('projects')
+                          .orderBy('createdAt', descending: true)
+                          .snapshots(),
+                      builder: (context, snapshot) {
+                        List<String> countriesList = ['Country'];
+                        if (snapshot.hasData) {
+                          for (int i = 0; i < snapshot.data.size; i++) {
+                            String temp = snapshot.data.docs[i]['country'];
+                            if (!countriesList.contains(temp)) {
+                              countriesList.add(temp);
+                            }
+                          }
+                        }
+                        return Container(
+                          width: 80.0,
+                          child: DropdownButton<String>(
+                            isExpanded: true,
+                            //isDense: true,
+                            value: dropdownValue2,
+                            icon: const FaIcon(
+                              FontAwesomeIcons.angleDown,
+                              color: kYellowGold,
+                            ),
+                            iconSize: 14,
+                            elevation: 16,
+                            style: const TextStyle(color: kYellowGold),
+                            onChanged: (String newValue) {
+                              setState(() {
+                                dropdownValue2 = newValue;
+                                getProjects(dropdownValue1, dropdownValue2);
+                              });
+                            },
+                            items: countriesList
+                                .map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value.trim()),
+                              );
+                            }).toList(),
+                          ),
                         );
-                      }).toList(),
+                      },
                     ),
                   ],
                 ),

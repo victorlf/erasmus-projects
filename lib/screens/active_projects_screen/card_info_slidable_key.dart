@@ -84,12 +84,6 @@ class _InfoCardSlidableKeyState extends State<InfoCardSlidableKey> {
 
   @override
   Widget build(BuildContext context) {
-    void _showSnackBar(BuildContext context, String text) {
-      ScaffoldMessenger.of(context)
-        ..hideCurrentSnackBar()
-        ..showSnackBar(SnackBar(content: Text(text)));
-    }
-
     return Slidable(
       key: keyButtonProject,
       actionPane: SlidableDrawerActionPane(),
@@ -231,7 +225,6 @@ class _InfoCardSlidableKeyState extends State<InfoCardSlidableKey> {
             color: Colors.blue[900],
           ),
           onTap: () {
-            //_showSnackBar(context, 'Edit');
             Navigator.pushNamed(
               context,
               EditProjectScreen.id,
