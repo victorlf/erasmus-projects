@@ -8,6 +8,7 @@ import 'package:erasmus_projects/screens/explore/explore_tutorial.dart';
 import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
 import 'package:erasmus_projects/services/authentication.dart';
 import 'package:erasmus_projects/services/load_json_files.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
@@ -38,31 +39,37 @@ class _ExploreScreenState extends State<ExploreScreen> {
   String _searchText = '';
 
   void showTutorial() async {
+    User user = await getCurrentUser();
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (prefs.getBool('watchedIntro') == null) {
-      tutorialCoachMark = TutorialCoachMark(
-        context,
-        targets: targets,
-        colorShadow: Colors.blue,
-        textSkip: "SKIP",
-        paddingFocus: 10,
-        opacityShadow: 0.8,
-        onFinish: () {
-          print("finish");
-        },
-        onClickTarget: (target) {
-          print('onClickTarget: $target');
-        },
-        onSkip: () {
-          print("skip");
-        },
-        onClickOverlay: (target) {
-          print('onClickOverlay: $target');
-        },
-      )..show();
+    tutorialCoachMark = TutorialCoachMark(
+      context,
+      targets: targets,
+      colorShadow: Colors.blue,
+      textSkip: "SKIP",
+      paddingFocus: 10,
+      opacityShadow: 0.8,
+      onFinish: () {
+        print("finish");
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+    );
+    //)..show();
 
+    if (prefs.getBool('watchedIntro') == null) {
+      tutorialCoachMark.show();
       prefs.setBool('watchedIntro', true);
+    } else if (user != null && prefs.getBool('watchedIntroAuth') == null) {
+      tutorialCoachMark.show();
+      prefs.setBool('watchedIntroAuth', true);
     }
   }
 
