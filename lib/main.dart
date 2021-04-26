@@ -11,13 +11,16 @@ import 'package:erasmus_projects/screens/publish_project_screen/edit_project_scr
 import 'package:erasmus_projects/screens/publish_project_screen/publish_project_screen.dart';
 import 'package:erasmus_projects/screens/rate_us.dart';
 import 'package:erasmus_projects/screens/register_organization_screen/register_organization_screen.dart';
+import 'package:erasmus_projects/services/authentication.dart';
 import 'package:erasmus_projects/utilities/constants.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await kInitialization;
+  User user = await getCurrentUser();
   runApp(
     MultiProvider(
       providers: [
@@ -27,12 +30,14 @@ void main() async {
           ),
         )
       ],
-      child: MyApp(),
+      child: MyApp(user),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
+  final user;
+  MyApp(this.user);
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -51,7 +56,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
           scaffoldBackgroundColor: Colors.white,
         ),
-        initialRoute: HomeScreen.id,
+        initialRoute: user == null ? HomeScreen.id : ExploreScreen.id,
         routes: {
           HomeScreen.id: (context) => HomeScreen(),
           ExploreScreen.id: (context) => ExploreScreen(),

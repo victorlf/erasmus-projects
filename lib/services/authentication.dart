@@ -185,7 +185,13 @@ Future organizationSigninAuthentication(
     );
     if (user != null) {
       if (user.user.emailVerified) {
-        Navigator.pushNamed(context, ExploreScreen.id);
+        //Navigator.of(context).pop();
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          ExploreScreen.id,
+          ModalRoute.withName(ExploreScreen.id),
+        );
+        //Navigator.pushNamed(context, ExploreScreen.id);
       } else {
         showDialog<void>(
           context: context,
