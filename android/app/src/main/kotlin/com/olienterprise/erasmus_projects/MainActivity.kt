@@ -1,4 +1,4 @@
-package com.example.erasmus_projects
+package com.olienterprise.erasmus_projects
 
 import io.flutter.embedding.android.FlutterActivity
 
