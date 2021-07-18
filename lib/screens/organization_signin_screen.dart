@@ -90,7 +90,7 @@ class _OrganizationSigninScreenState extends State<OrganizationSigninScreen> {
           body: Container(
             color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              padding: const EdgeInsets.symmetric(horizontal: 30.0),
               child: Form(
                 key: _formKey,
                 child: ListView(

@@ -159,6 +159,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
       drawer: MainDrawer(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Stack(
             clipBehavior: Clip.none,
